@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, onUnmounted, ref, render } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import {Service, Auth} from '../../services/service'
+import { getAuth, signInWithEmailAndPassword , onAuthStateChanged } from "firebase/auth";
+import { useCurrentUser, useFirebaseAuth } from 'vuefire'
 
 defineProps({
   email: {
@@ -14,29 +15,33 @@ defineProps({
 
 const router = useRouter();
 const route = useRoute();
+const auth = useFirebaseAuth()
+
+const email = ref()
+const password = ref()
 
 
-const email = defineModel("email", { required: true })
-const password = defineModel("password", { required: true})
-
-
-async function login() {
-    console.log(email.value, password.value)
-    try {
-      let loginReq = await Auth.login(email.value, password.value)
-      console.log(loginReq)
-      if (loginReq) {
-        router.go("/")
-      }
-    } catch (error) {
-      console.error(error)
-    }
-    
+async function login(email, password) {
+  await signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    router.go("/")
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error(error)
+  });
    
 }
 
 
-onMounted(() => {});
+onMounted(() => {
+ 
+
+});
 
 onUnmounted(() => {});
 </script>
@@ -45,9 +50,9 @@ onUnmounted(() => {});
     LOGIN
     <div class="login-wrapper">
       <div class="login-card">
-        <input v-model="email" type="text" />
+        <input v-model="email" type="email" />
         <input v-model="password" type="password" />
-        <button @click="login()">LOGIN</button>
+        <button id="button" @click="login(email, password)">LOGIN</button>
       </div>
     </div>
   </div>

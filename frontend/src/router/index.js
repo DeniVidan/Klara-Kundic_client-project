@@ -7,8 +7,16 @@ import Contact from "../views/Contact.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 
+import { useCurrentUser, useFirebaseAuth } from "vuefire";
+import { onAuthStateChanged } from "firebase/auth";
 
-import {Service, Auth} from "@/../services/service"
+import { Service, Auth } from "@/../services/service";
+import { getCurrentUser } from "@/firebase/init";
+
+
+const auth = useFirebaseAuth()
+
+
 /* eslint-disable */
 const routes = [
   {
@@ -48,38 +56,33 @@ const router = createRouter({
   routes,
 });
 
-
-
-
 /* 
 let includesPublicRoute = publicRoutes. */
 
+
+
 router.beforeEach(async (to, from, next) => {
+  let userRoutes = ["/login", "/register", "/profile"];
+  let publicRoutes = [
+    "/login",
+    "/register",
+    "/",
+    "/about",
+    "/work",
+    "contact",
+    "/services",
+  ];
+  let loginRequired = !publicRoutes.includes(to.path);
+  let isLoginRoute = userRoutes.includes(to.path);
 
-  let publicRoutes = ["/login" ,"/register",]
-  let loginRequired = !publicRoutes.includes(to.path)
+  const u = await getCurrentUser();
+  console.log(u);
 
-  let isAuth = Auth.state.authenticate
+  /*   console.log("a", publicRoutes.includes(to.path), Auth.state.authenticate) */
 
-  console.log("a", publicRoutes.includes(to.path), Auth.state.authenticate)
-
-
-
-    if (!isAuth && loginRequired) {
-      next("/login")
-    }
-    else if (isAuth && !loginRequired) {
-      next("/")
-    }
-
-    else next()
-
-
-
-
-
-  })
-
-
+  if (u && isLoginRoute) {
+    next("/");
+  } else next();
+});
 
 export default router;

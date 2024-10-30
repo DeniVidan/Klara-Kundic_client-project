@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, render } from "vue";
 import { useRouter, useRoute } from "vue-router";
-
+import { useCurrentUser, useFirebaseAuth } from 'vuefire'
 
 
 
@@ -9,6 +9,9 @@ defineProps({});
 
 const router = useRouter();
 const route = useRoute();
+const auth = useFirebaseAuth()
+
+/* console.log(auth.currentUser) */
 
 onMounted(() => {
 

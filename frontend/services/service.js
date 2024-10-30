@@ -48,7 +48,7 @@ let Auth = {
       //console.log("login response data: ", response.data.user);
       if (response.data.success === true) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        console.success("Login successfull")
+        console.log("Login successfull")
         //document.cookie = JSON.stringify({"token": response.data.token})
         //console.log(localStorage.getItem("user"))
 
@@ -99,7 +99,7 @@ let Auth = {
     if (typeof window !== "undefined") {
       if (JSON.parse(localStorage.getItem("user")) !== null) {
         let user = JSON.parse(localStorage.getItem("user"));
-        console.log("authenticated user: ", user);
+        //console.log("authenticated user: ", user);
         return true;
       } else return false;
     }

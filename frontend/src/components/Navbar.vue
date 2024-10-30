@@ -1,20 +1,24 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useCurrentUser, useFirebaseAuth } from "vuefire";
+import { signOut } from "firebase/auth";
+
 gsap.registerPlugin(ScrollTrigger);
 
 const router = useRouter();
 const route = useRoute();
 
+const auth = useFirebaseAuth()
+
+
 
 onMounted(() => {
+  console.log()
+});
 
-
-
-    
-}) 
 function hamburgerClick() {
   const icon = document.querySelector("#hamburgerIcon");
   const navigationLinks = document.querySelector(".links-container.mobile");
@@ -30,7 +34,7 @@ function hamburgerClick() {
     {
       x: 0,
       opacity: 1,
-/*       stagger: {
+      /*       stagger: {
         amount: 0.08,
         from: "start",
         ease: "power4.out",
@@ -38,14 +42,19 @@ function hamburgerClick() {
     }
   );
 }
-
 </script>
 
 <template>
   <nav>
     <div class="brand-container">
       <div class="brand-logo"></div>
-      <div class="brand-name">denividan@gmail.com</div>
+      <div v-if="useCurrentUser().value" class="brand-name">
+        {{ useCurrentUser().value.email }}
+      </div>
+      <div v-if="!useCurrentUser().value" class="brand-name">Klara Kundich</div>
+    </div>
+    <div>
+      <button v-if="useCurrentUser().value" @click="signOut(auth)">LOGIUT</button>
     </div>
     <div class="links-container desktop">
       <ul>
@@ -91,7 +100,6 @@ function hamburgerClick() {
         <div>004</div>
         <div>CONTACT</div>
       </RouterLink>
-
     </ul>
   </div>
 </template>
@@ -253,7 +261,6 @@ a {
   display: none;
 }
 
-
 @media (max-width: 2025px) {
   .navbar-hamburger {
     display: flex;
@@ -311,7 +318,4 @@ a {
   .navbar-hamburger {
   }
 }
-
-
-
 </style>

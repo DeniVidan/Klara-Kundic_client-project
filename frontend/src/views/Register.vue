@@ -1,36 +1,77 @@
 <script setup>
 import { onMounted, onUnmounted, ref, render } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import {Service, Auth} from '../../services/service'
+import { Service, Auth } from "../../services/service";
+import { addDoc, collection } from "firebase/firestore";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { useCurrentUser, useFirebaseAuth } from 'vuefire'
 
-defineProps({});
+
+
+
+defineProps({
+  email: {
+    type: [String],
+  },
+  password: {
+    type: [String],
+  },
+});
+
+
 
 const router = useRouter();
 const route = useRoute();
 
-
-const username = defineModel("username", { required: true })
-const password = defineModel("password", { required: true})
+const auth = useFirebaseAuth();
 
 
-function login() {
-    console.log(username.value, password.value)
-    Auth.register(username.value, password.value)
+const email = ref()
+const password = ref()
+
+
+async function register(email, password) {
+  await createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed up
+      const user = userCredential.user;
+      console.log(user);
+      router.go("/");
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      console.error(error);
+      // ..
+    });
 }
 
 
-onMounted(() => {});
+
+onMounted(() => {
+const user = useCurrentUser()
+console.log(user)
+});
 
 onUnmounted(() => {});
 </script>
+
+
+
 <template>
   <div class="wrapper">
     REGISTER
     <div class="login-wrapper">
       <div class="login-card">
-        <input v-model="username" type="text" />
-        <input v-model="password" type="password" />
-        <button @click="login()">LOGIN</button>
+        <input id="email" v-model="email" type="email" />
+        <input id="password" v-model="password" type="password" />
+        <button id="button" @click="register(email, password)">REGISTER</button>
       </div>
     </div>
   </div>
@@ -38,8 +79,8 @@ onUnmounted(() => {});
 
 <style scoped>
 .login-card {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 @font-face {
   font-family: Glamora;
