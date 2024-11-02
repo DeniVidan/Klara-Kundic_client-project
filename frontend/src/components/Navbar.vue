@@ -46,21 +46,12 @@ function hamburgerClick() {
 
 <template>
 
-  <nav>
-<!--       <div v-if="useCurrentUser().value" class="brand-name">
-        {{ useCurrentUser().value.email }}
-      </div>
-      <div v-if="!useCurrentUser().value" class="brand-name">Klara Kundich</div> -->
 
-    <div>
+  <div style="z-index: 6;">
       <button v-if="useCurrentUser().value" @click="signOut(auth)">
         LOGOUT
       </button>
     </div>
-
-
-    <!-- Navigation for mobile (initially hidden) -->
-  </nav>
   <div
       style="
         background-color: var(--beige-detail-color);

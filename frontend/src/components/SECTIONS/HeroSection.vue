@@ -5,22 +5,10 @@ import { onMounted } from "vue";
 
 gsap.registerPlugin(ScrollTrigger);
 
-defineProps({
-  msg: {
-    type: String,
-    required: true,
-  },
-});
+defineProps({});
 
 onMounted(() => {
-  /*   ScrollTrigger.create({
-    trigger: ".brand-name",
-    start: "top top", //top+100
-    end: "max",
-    pin: true,
-    pinSpacing: false,
-    markers: true,
-  }); */
+
   let tl = gsap.timeline({
     scrollTrigger: {
       trigger: ".brand-name",
@@ -38,7 +26,7 @@ onMounted(() => {
     xPercent: -40,
     delay: -2,
     duration: 0.5,
-    zIndex: 1000
+    zIndex: 1000,
   });
 });
 </script>

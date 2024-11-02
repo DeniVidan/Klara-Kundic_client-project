@@ -5,12 +5,7 @@ import { onMounted } from "vue";
 
 gsap.registerPlugin(ScrollTrigger);
 
-defineProps({
-  msg: {
-    type: String,
-    required: true,
-  },
-});
+defineProps({});
 
 onMounted(() => {
   /*   ScrollTrigger.create({
@@ -35,8 +30,12 @@ onMounted(() => {
     </div>
 
     <div class="second-part">
-      <div class="quotation-mark-1"><img src="@/assets/images/quote1.png" alt=""></div>
-      <div class="quotation-mark-2"><img src="@/assets/images/quote2.png" alt=""></div>
+      <div class="quotation-mark-1">
+        <img src="@/assets/images/quote1.png" alt="" />
+      </div>
+      <div class="quotation-mark-2">
+        <img src="@/assets/images/quote2.png" alt="" />
+      </div>
       <p>
         Vašu ljubavnu priču pretvaram u umjetnost, potez po potez. Bilo da se
         radi o uživoskicama na dan vjenčanja ili personaliziranim slikama koje
@@ -75,8 +74,8 @@ onMounted(() => {
   padding-top: 150px;
 }
 .second-part {
-    position: relative;
-    top: 0
+  position: relative;
+  top: 0;
 }
 .title {
   font-family: sectionTitleFont;
@@ -94,24 +93,24 @@ onMounted(() => {
   width: 80%;
   position: absolute;
 }
-.second-part p{
-    display: flex;
-    align-items: center;
-    height: 80vh;
-    margin: 0px 20px;
-    font-size: 26px;
-    line-height: 1.3;
-    color: var(--vt-c-black);
+.second-part p {
+  display: flex;
+  align-items: center;
+  height: 80vh;
+  margin: 0px 20px;
+  font-size: 26px;
+  line-height: 1.3;
+  color: var(--vt-c-black);
 }
 .quotation-mark-1 {
-    position: absolute;
-    top: 70px;
-    left: -100px;
+  position: absolute;
+  top: 70px;
+  left: -100px;
 }
 .quotation-mark-2 {
-    position: absolute;
-    bottom: 90px;
-    right: -100px;
+  position: absolute;
+  bottom: 90px;
+  right: -100px;
 }
 @media (min-width: 1024px) {
 }

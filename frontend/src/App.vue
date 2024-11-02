@@ -19,11 +19,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <Navbar />
+  <div style="display: flex; flex-direction: column;">
+      <Navbar />
 
   <main>
     <RouterView />
   </main>
+  </div>
+
 </template>
 
 <style scoped>

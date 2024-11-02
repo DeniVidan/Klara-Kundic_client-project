@@ -19,6 +19,8 @@ coverage
 
 /src/firebase/init.js
 
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
