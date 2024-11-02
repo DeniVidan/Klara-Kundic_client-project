@@ -1,32 +1,49 @@
 <script setup>
 import { onMounted, onUnmounted, ref, render } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useCurrentUser, useFirebaseAuth } from 'vuefire'
-
-
+import { useCurrentUser, useFirebaseAuth } from "vuefire";
+import HeroSection from "../components/SECTIONS/HeroSection.vue";
+import AboutSection from "@/components/SECTIONS/AboutSection.vue";
+import ServicesSection from "@/components/SECTIONS/ServicesSection.vue";
 
 defineProps({});
 
 const router = useRouter();
 const route = useRoute();
-const auth = useFirebaseAuth()
+const auth = useFirebaseAuth();
 
 /* console.log(auth.currentUser) */
 
-onMounted(() => {
-
-
-});
+onMounted(() => {});
 
 onUnmounted(() => {});
 </script>
 <template>
   <div class="wrapper">
-    HOME
+    <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" />
+    <HeroSection style="position: relative; z-index: 2;"/>
+    <AboutSection style="position: relative; z-index: 1;"/>
+    <ServicesSection style="position: relative;"/>
+    <div
+      style="
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background-color: blue;
+      "
+    ></div>
   </div>
 </template>
 
 <style scoped>
+.bg-img {
+  position: fixed;
+  width: 175%;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  filter: brightness(0.4);
+}
 
 @font-face {
   font-family: Glamora;

@@ -11,13 +11,13 @@ gsap.registerPlugin(ScrollTrigger);
 const router = useRouter();
 const route = useRoute();
 
-const auth = useFirebaseAuth()
-
-
+const auth = useFirebaseAuth();
 
 onMounted(() => {
-  console.log()
+
 });
+
+
 
 function hamburgerClick() {
   const icon = document.querySelector("#hamburgerIcon");
@@ -45,35 +45,45 @@ function hamburgerClick() {
 </script>
 
 <template>
+
   <nav>
-    <div class="brand-container">
-      <div class="brand-logo"></div>
-      <div v-if="useCurrentUser().value" class="brand-name">
+<!--       <div v-if="useCurrentUser().value" class="brand-name">
         {{ useCurrentUser().value.email }}
       </div>
-      <div v-if="!useCurrentUser().value" class="brand-name">Klara Kundich</div>
-    </div>
+      <div v-if="!useCurrentUser().value" class="brand-name">Klara Kundich</div> -->
+
     <div>
-      <button v-if="useCurrentUser().value" @click="signOut(auth)">LOGIUT</button>
-    </div>
-    <div class="links-container desktop">
-      <ul>
-        <a href=""><li>link</li></a>
-        <a href=""><li>link</li></a>
-        <a href=""><li>link</li></a>
-        <a href=""><li>link</li></a>
-      </ul>
+      <button v-if="useCurrentUser().value" @click="signOut(auth)">
+        LOGOUT
+      </button>
     </div>
 
-    <a id="hamburgerIcon" @click="hamburgerClick()" class="navbar-hamburger">
-      <span aria-hidden="true"></span>
-    </a>
+
     <!-- Navigation for mobile (initially hidden) -->
   </nav>
+  <div
+      style="
+        background-color: var(--beige-detail-color);
+        display: flex;
+        position: fixed;
+        border-radius: 100%;
+        width: 50px;
+        height: 50px;
+        z-index: 4;
+        right: 10px;
+        top: 10px
+      "
+    >
+      <a id="hamburgerIcon" @click="hamburgerClick()" class="navbar-hamburger">
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+
   <div class="links-container mobile">
     <ul>
       <RouterLink @click="hamburgerClick()" to="/" class="link navbar-anim">
-        <div>001</div>
+        <div class="nav-item-num">001</div>
         <div>HOME</div>
       </RouterLink>
       <RouterLink
@@ -81,7 +91,7 @@ function hamburgerClick() {
         to="/about"
         class="link navbar-anim"
       >
-        <div>002</div>
+        <div class="nav-item-num">002</div>
         <div>ABOUT</div>
       </RouterLink>
       <RouterLink
@@ -89,7 +99,7 @@ function hamburgerClick() {
         to="/mywork"
         class="link navbar-anim"
       >
-        <div>003</div>
+        <div class="nav-item-num">003</div>
         <div>MY WORK</div>
       </RouterLink>
       <RouterLink
@@ -97,7 +107,7 @@ function hamburgerClick() {
         to="/contact"
         class="link navbar-anim"
       >
-        <div>004</div>
+        <div class="nav-item-num">004</div>
         <div>CONTACT</div>
       </RouterLink>
     </ul>
@@ -113,34 +123,32 @@ body {
   margin: 0;
 }
 
-header {
-  position: absolute;
-  max-height: 400px;
-  min-height: 60px;
-  display: flex;
-  align-self: center;
-}
+
 nav {
-  top: 0;
-  left: 0;
-  z-index: 1;
+  top: 10px;
+  left: 10px;
+  align-items: center;
+  right: 10px;
+  z-index: 2;
   position: fixed;
   height: 60px;
-  color: white;
+  width: 50%;
   display: flex;
-  width: 100%;
   justify-content: space-around;
-  background-color: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(15px);
+  background-color: transparent;
+  mix-blend-mode: difference;
 }
 .brand-container {
   display: flex;
   gap: 10px;
 }
+
 .brand-name {
-  font-size: 13px;
+  font-family: heroHandwrittenFont;
+  font-size: 30px;
   align-self: center;
   cursor: pointer;
+  color: white;
 }
 .brand-logo {
   align-self: center;
@@ -156,38 +164,13 @@ nav {
 
 ul {
   display: flex;
-  gap: 20px;
   list-style-type: none;
 }
-/* li {
-  cursor: pointer;
-  color: #adadadff;
-}
-li:hover {
-  cursor: pointer;
-  color: #e6e6e6;
-} */
+
 ul > a > li {
   position: relative;
 }
 
-ul a li::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 4px;
-  bottom: -7px;
-  left: 50%;
-  /* Start from the middle */
-  transform: translateX(-50%); /* Center the line */
-  background-color: #61ff61;
-  transition: width 200ms ease-out, left 200ms ease-out;
-}
-
-ul a:hover li::after {
-  width: 100%;
-  /* Move to the left edge */
-}
 
 a {
   text-decoration: none;
@@ -222,7 +205,7 @@ a {
   width: 100%;
   height: 2px;
   background-color: white;
-  top: -450%;
+  top: -250%;
   left: 0;
   content: "";
   border-radius: 2px;
@@ -233,7 +216,7 @@ a {
   width: 100%;
   height: 2px;
   background-color: white;
-  top: 450%;
+  top: 250%;
   left: 0;
   content: "";
   border-radius: 2px;
@@ -245,20 +228,24 @@ a {
   transition: transform 0.3s ease-in-out;
 }
 .navbar-hamburger.open > span::before {
-  transform: translateY(9px) rotate(45deg);
+  transform: translateY(5px) rotate(45deg);
 }
 .navbar-hamburger.open > span::after {
-  transform: translateY(-9px) rotate(-45deg);
+  transform: translateY(-5px) rotate(-45deg);
 }
 
 .links-container.mobile {
   top: 0;
   left: 0;
   display: flex;
-  z-index: 0;
 }
 .links-container.desktop {
   display: none;
+}
+
+
+.nav-item-num {
+  font-size: 17px;
 }
 
 @media (max-width: 2025px) {
@@ -266,7 +253,7 @@ a {
     display: flex;
   }
   .links-container.mobile {
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: var(--color-background);
     backdrop-filter: blur(15px);
     width: 100%;
     /* transform: translateY(-100px); */
@@ -276,7 +263,7 @@ a {
     display: flex;
     justify-content: center;
     transition: 300ms ease-out;
-    z-index: 1;
+    z-index: 3;
   }
   .links-container.mobile > ul {
     display: flex;
@@ -287,16 +274,16 @@ a {
   .links-container.mobile.open {
     display: flex;
     top: 0vh;
-    height: calc(
-      100vh - 60px
-    ); /* Adjust the max-height to your content height */
-    transform: translateY(60px);
+    height: calc(100vh); /* Adjust the max-height to your content height */
+    /* transform: translateY(60px); */
     opacity: 1;
     transition: 0.4s ease-out;
+    justify-content: end;
+    padding-right:10px;
   }
   .links-container.mobile.open > ul {
     align-self: center;
-    font-size: 80px;
+    font-size: 50px;
     font-weight: bolder;
   }
   .links-container.mobile.open > ul > a {
@@ -304,6 +291,7 @@ a {
     align-self: flex-start;
     gap: 50px;
     width: 100%;
+    color: var(--vt-c-black);
   }
 
   .links-container.desktop {
