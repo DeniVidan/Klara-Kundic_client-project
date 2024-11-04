@@ -6,6 +6,8 @@ import router from './router/index.js'
 import { firebaseApp } from './firebase/init'
 import { VueFire, VueFireAuth } from 'vuefire'
 
+
+
 createApp(App).use(VueFire, {
     // imported above but could also just be created here
     firebaseApp,
@@ -14,6 +16,5 @@ createApp(App).use(VueFire, {
       VueFireAuth(),
     ],
   }).use(router)
-
 
 .mount('#app')

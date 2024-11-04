@@ -2,9 +2,21 @@
 import { onMounted, onUnmounted, ref, render } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useCurrentUser, useFirebaseAuth } from "vuefire";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
 import HeroSection from "../components/SECTIONS/HeroSection.vue";
 import AboutSection from "@/components/SECTIONS/AboutSection.vue";
 import ServicesSection from "@/components/SECTIONS/ServicesSection.vue";
+import DetailsSection from "@/components/SECTIONS/DetailsSection.vue";
+import WorkSection from "@/components/SECTIONS/WorkSection.vue";
+import PageBreak from "@/components/braker/PageBreak.vue";
+import landingText from "@/assets/data-cards/landingText.json";
+import ContactSection from "@/components/SECTIONS/ContactSection.vue";
+import FooterSection from "@/components/SECTIONS/FooterSection.vue";
+
+gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(Draggable);
 
 defineProps({});
 
@@ -14,24 +26,43 @@ const auth = useFirebaseAuth();
 
 /* console.log(auth.currentUser) */
 
-onMounted(() => {});
+onMounted(() => {
+  ScrollTrigger.create({
+    trigger: ".footer",
+    pin: true,
+    start: "bottom bottom",
+    end: "+=100%",
+    markers: true,
+  });
+});
 
 onUnmounted(() => {});
 </script>
 <template>
   <div class="wrapper">
     <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" />
-    <HeroSection style="position: relative; z-index: 2;"/>
-    <AboutSection style="position: relative; z-index: 1;"/>
-    <ServicesSection style="position: relative;"/>
-    <div
+    <HeroSection style="position: relative; z-index: 2" />
+    <AboutSection style="position: relative; z-index: 2" />
+    <ServicesSection style="position: relative; z-index: 2" />
+    <DetailsSection style="position: relative; z-index: 2" />
+    <PageBreak
+      :msg="landingText[0].text"
+      style="position: relative; z-index: 2"
+    />
+    <WorkSection style="position: relative; z-index: 2" />
+    <ContactSection style="position: relative; z-index: 1" />
+    <FooterSection
+      class="footer"
       style="
         position: relative;
-        width: 100vw;
+        margin-top: -100vh;
+        width: 100%;
         height: 100vh;
-        background-color: blue;
+        z-index: 1;
+        box-sizing: border-box;
+        padding: 0;
       "
-    ></div>
+    />
   </div>
 </template>
 

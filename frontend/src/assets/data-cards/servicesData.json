@@ -1,0 +1,13 @@
+[
+    {
+      "name": "service1",
+      "image": "src/assets/images/service1.jpg",
+      "alt": "image"
+    },
+    {
+      "name": "service2",
+      "image": "src/assets/images/service2.jpg",
+      "alt": "image"
+    }
+
+]

@@ -1,7 +1,7 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #D8D2C2;
-  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-soft: #cecece;
   --vt-c-white-mute: #f2f2f2;
 
   --vt-c-black: #4A4947;
@@ -45,6 +45,12 @@
   font-family: sectionTitleFont;
   src: url(../assets/fonts/VinaSans-Regular.ttf) format("truetype");
 }
+
+@font-face {
+  font-family: sectionContactFont;
+  src: url(../assets/fonts/Estonia-Regular.ttf) format("truetype");
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

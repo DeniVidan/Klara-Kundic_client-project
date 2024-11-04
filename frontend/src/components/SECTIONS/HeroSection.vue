@@ -16,7 +16,7 @@ onMounted(() => {
       end: "max",
       pin: true,
       pinSpacing: false,
-      markers: true,
+      /* markers: true, */
       scrub: 1,
     },
   });
@@ -43,6 +43,7 @@ onMounted(() => {
 .wrapper {
   color: var(--vt-c-white-soft);
   height: 100vh;
+  width: 100vw;
   align-items: center;
   display: flex;
   justify-content: center;
@@ -54,7 +55,7 @@ onMounted(() => {
   font-size: 55px;
   cursor: pointer;
   color: var(--vt-c-white-soft);
-
+  
   z-index: 0;
   mix-blend-mode: difference;
 }

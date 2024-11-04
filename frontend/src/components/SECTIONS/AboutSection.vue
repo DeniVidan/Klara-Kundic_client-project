@@ -81,7 +81,7 @@ onMounted(() => {
   font-family: sectionTitleFont;
   font-size: 60px;
   color: var(--vt-c-black);
-  margin-left: 30px;
+  margin-left: 45px;
 }
 .about-image {
   width: 100%;
@@ -90,7 +90,7 @@ onMounted(() => {
   z-index: 1;
 }
 .about-image img {
-  width: 80%;
+  width: 350px;
   position: absolute;
 }
 .second-part p {

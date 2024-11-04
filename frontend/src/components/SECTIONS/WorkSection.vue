@@ -60,16 +60,16 @@ onMounted(() => {
 
 <template>
   <div class="wrapper">
-    <div class="title">what i offer</div>
+    <div class="title">what i do</div>
     <div class="carousel">
       <div class="card-wrap">
       <div
         v-for="service in services"
-        :key="service.name"
+        :key="service.image"
         class="services-wrapper"
       >
-        <div class="card-title">{{ service.name }}</div>
         <img v-bind:src="service.image" class="image" alt="" />
+        <div class="text">asdasd</div>
       </div>
     </div>
     </div>
@@ -107,12 +107,13 @@ onMounted(() => {
 }
 .services-wrapper {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
 
-.card-title {
-  font-size: 50px;
-  position: absolute;
-  bottom: 0;
+.text {
+    color: var(--vt-c-black);
   width: 100%;
   text-align: center;
 }
