@@ -23,7 +23,7 @@ onMounted(() => {
 
   tl.to(".brand-name", {
     scale: 0.6,
-    xPercent: -40,
+    xPercent: -35,
     delay: -2,
     duration: 0.5,
     zIndex: 1000,

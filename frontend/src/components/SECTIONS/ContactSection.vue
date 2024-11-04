@@ -15,7 +15,7 @@ onMounted(() => {
 
 <template>
   <div class="wrapper">
-    <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" />
+    <!-- <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" /> -->
     <div class="title">contact me</div>
     <div class="form-wraper">
       <div class="form">
@@ -33,14 +33,14 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.bg-img {
+/* .bg-img {
   position: fixed;
   width: 175%;
   z-index: -1;
   left: 0;
   top: 0;
   filter: brightness(0.4);
-}
+} */
 .wrapper {
   color: var(--vt-c-white-soft);
   height: 100vh;

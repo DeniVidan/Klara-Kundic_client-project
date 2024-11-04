@@ -69,7 +69,7 @@ onMounted(() => {
         class="services-wrapper"
       >
         <img v-bind:src="service.image" class="image" alt="" />
-        <div class="text">asdasd</div>
+        <div class="text"><h2>neki text ...</h2></div>
       </div>
     </div>
     </div>
@@ -80,7 +80,7 @@ onMounted(() => {
 .wrapper {
   background-color: var(--color-background);
   color: var(--vt-c-white-soft);
-  min-height: 80vh;
+  min-height: 100vh;
   width: 100vw;
   align-items: center;
   display: flex;
@@ -109,7 +109,7 @@ onMounted(() => {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 100px;
 }
 
 .text {

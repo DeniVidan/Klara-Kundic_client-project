@@ -45,7 +45,7 @@ ul {
 .wrapper {
   background-color: var(--color-background);
   color: var(--vt-c-white-soft);
-  min-height: 35vh;
+  min-height: 50vh;
   width: 100vw;
   align-items: center;
   display: flex;
@@ -55,7 +55,7 @@ ul {
 }
 .title {
   font-family: sectionTitleFont;
-  font-size: 60px;
+  font-size: 45px;
   color: var(--vt-c-black);
 }
 .items-wrapper {

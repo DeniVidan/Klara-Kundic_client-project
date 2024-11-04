@@ -27,13 +27,13 @@ const auth = useFirebaseAuth();
 /* console.log(auth.currentUser) */
 
 onMounted(() => {
-  ScrollTrigger.create({
+/*   ScrollTrigger.create({
     trigger: ".footer",
     pin: true,
     start: "bottom bottom",
     end: "+=100%",
     markers: true,
-  });
+  }); */
 });
 
 onUnmounted(() => {});
@@ -41,7 +41,7 @@ onUnmounted(() => {});
 <template>
   <div class="wrapper">
     <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" />
-    <HeroSection style="position: relative; z-index: 2" />
+    <HeroSection style="position: relative; z-index: 3" />
     <AboutSection style="position: relative; z-index: 2" />
     <ServicesSection style="position: relative; z-index: 2" />
     <DetailsSection style="position: relative; z-index: 2" />
@@ -51,18 +51,7 @@ onUnmounted(() => {});
     />
     <WorkSection style="position: relative; z-index: 2" />
     <ContactSection style="position: relative; z-index: 1" />
-    <FooterSection
-      class="footer"
-      style="
-        position: relative;
-        margin-top: -100vh;
-        width: 100%;
-        height: 100vh;
-        z-index: 1;
-        box-sizing: border-box;
-        padding: 0;
-      "
-    />
+    <FooterSection class="footer" style="position: relative" />
   </div>
 </template>
 
@@ -70,7 +59,7 @@ onUnmounted(() => {});
 .bg-img {
   position: fixed;
   width: 175%;
-  z-index: 0;
+  z-index: -1;
   left: 0;
   top: 0;
   filter: brightness(0.4);
