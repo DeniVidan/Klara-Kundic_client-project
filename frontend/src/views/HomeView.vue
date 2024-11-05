@@ -41,15 +41,15 @@ onUnmounted(() => {});
 <template>
   <div class="wrapper">
     <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" />
-    <HeroSection style="position: relative; z-index: 3" />
-    <AboutSection style="position: relative; z-index: 2" />
-    <ServicesSection style="position: relative; z-index: 2" />
-    <DetailsSection style="position: relative; z-index: 2" />
+    <HeroSection style="position: relative; z-index: 2" />
+    <AboutSection style="position: relative; z-index: 1" />
+    <ServicesSection style="position: relative; z-index: 1" />
+    <DetailsSection style="position: relative; z-index: 1" />
     <PageBreak
       :msg="landingText[0].text"
-      style="position: relative; z-index: 2"
+      style="position: relative; z-index: 1"
     />
-    <WorkSection style="position: relative; z-index: 2" />
+    <WorkSection style="position: relative; z-index: 1" />
     <ContactSection style="position: relative; z-index: 1" />
     <FooterSection class="footer" style="position: relative" />
   </div>
