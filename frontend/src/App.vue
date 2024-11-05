@@ -16,9 +16,9 @@ onMounted(() => {});
 
 <template>
   <div class="wrapper">
-    <Navbar style="z-index: 1;" />
+    <Navbar />
     <main>
-      <RouterView style="z-index: 0;" />
+      <RouterView />
     </main>
   </div>
 </template>

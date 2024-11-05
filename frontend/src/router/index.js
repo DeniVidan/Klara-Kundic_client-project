@@ -76,7 +76,7 @@ router.beforeEach(async (to, from, next) => {
   let isLoginRoute = userRoutes.includes(to.path);
 
   const u = await getCurrentUser();
-  console.log(u);
+ 
 
   /*   console.log("a", publicRoutes.includes(to.path), Auth.state.authenticate) */
 
