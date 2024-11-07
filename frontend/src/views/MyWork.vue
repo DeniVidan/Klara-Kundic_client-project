@@ -20,7 +20,7 @@ onMounted(() => {
   gsap.set(".cards li", { xPercent: 250, opacity: 0, scale: 0 });
   gsap.set(".title", { opacity: 0, xPercent: 100 });
 
-  const spacing = 0.2, // spacing of the cards (stagger)
+  const spacing = 0.135, // spacing of the cards (stagger)
     snapTime = gsap.utils.snap(spacing), // we'll use this to snapTime the playhead on the seamlessLoop
     cards = gsap.utils.toArray(".cards li"),
     // this function will get called for each element in the buildSeamlessLoop() function, and we just need to return an animation that'll get inserted into a master timeline, spaced
@@ -41,17 +41,18 @@ onMounted(() => {
           onUpdate: () => {
             // Controlla se la card è al centro (xPercent vicino a 0)
             const progress = tl.progress();
+           
             if (progress >= 0.33 && progress <= 0.55) {
               // Se la card è centrale, mostra il titolo
               gsap.to(element.querySelector(".title"), {
                 xPercent: 0,
                 opacity: 1,
-                duration: 0.3,
+                duration: 0.2,
               });
             } else if (progress <= 0.33) {
               gsap.to(element.querySelector(".title"), {
                 opacity: 0,
-                duration: 0.3,
+                duration: 0.2,
                 xPercent: 100,
               });
             } else if (progress >= 0.35) {
@@ -91,6 +92,7 @@ onMounted(() => {
         /* console.log(self.direction) */
         progress_count.value =
           "00" + Math.floor(Math.floor(self.progress * 100) / 14 + 1);
+          
         progressSpan.style.setProperty(
           "--progress-width",
           Math.floor(self.progress * 100) + "%"
@@ -100,7 +102,7 @@ onMounted(() => {
           
         } else if (scroll < 1 && self.direction < 0) {
           wrap(-1, self.end - 2);
-          console.log("tusmo")
+         
         } else {
           scrub.vars.offset =
             (iteration + self.progress) * seamlessLoop.duration();
@@ -136,8 +138,13 @@ onMounted(() => {
         (snappedTime - seamlessLoop.duration() * iteration) /
         seamlessLoop.duration(),
       scroll = progressToScroll(progress);
+      
     if (progress >= 1 || progress < 0) {
+      console.log("wrati", progress, scroll)
       return wrap(Math.floor(progress), scroll);
+      
+    } else {
+      console.log("wrati2",progress)
     }
     trigger.scroll(scroll);
   }
@@ -154,7 +161,7 @@ document.querySelector(".prev").addEventListener("click", () => scrollToOffset(s
         repeat: -1, // to accommodate infinite scrolling/looping
         onRepeat() {
           // works around a super rare edge case bug that's fixed GSAP 3.6.1
-          this._time === this._dur && (this._tTime += this._dur - 0.01);
+          this._time === this._dur && (this._tTime += this._dur - 0.1);
         },
         onReverseComplete() {
           this.totalTime(this.rawTime() + this.duration() * 100); // seamless looping backwards
@@ -203,37 +210,14 @@ document.querySelector(".prev").addEventListener("click", () => scrollToOffset(s
     },
     onDrag() {
       scrub.vars.offset = this.startOffset + (this.startX - this.x) * 0.001;
-      scrub.invalidate().restart(); // same thing as we do in the ScrollTrigger's onUpdate
+      // scrub.invalidate().restart(); same thing as we do in the ScrollTrigger's onUpdate
     },
     onDragEnd() {
       scrollToOffset(scrub.vars.offset);
-      console.log("drag end",scrub.vars.offset )
+      
     },
   });
-  const cursorBorder = document.querySelector("#cursor-border");
-  cards.forEach((card) => {
-    card.addEventListener("mouseover", (e) => {
-      //console.log(e.target);
-      let text_mirror = e.target.textContent;
-      /* console.log(text_mirror) */
-      cursorBorder.style.setProperty("--size", "100px");
-      /* cursorBorder.style.mixBlendMode = "difference"; */
-      cursorBorder.style.background = `white`;
-      cursorBorder.style.opacity = `0.7`;
-      cursorBorder.style.setProperty("--cursor-image", "none");
-      //cursorBorder.style.setProperty("--tekst", "burek")
-    });
 
-    card.addEventListener("mouseout", (e) => {
-      cursorBorder.style.setProperty("--size", "50px");
-      cursorBorder.style.background = `transparent`;
-      cursorBorder.style.setProperty(
-        "--cursor-image",
-        `url(https://www.orthopedicare.com/wp-content/themes/socius/images/scroll-down.gif)`
-      );
-      //cursorBorder.style.setProperty("--tekst", "dada")
-    });
-  });
 });
 
 onUnmounted(() => {});
@@ -241,6 +225,7 @@ onUnmounted(() => {});
 
 <template>
   <div class="gallery">
+    <div class="main-title">my work</div>
     <div
       style="
         position: absolute;
@@ -253,7 +238,7 @@ onUnmounted(() => {});
     </div>
     <div class="progress-section">
       <div class="progress-span"></div>
-      <span>{{ progress_count }} / 007</span>
+      <span>{{ progress_count }}/007</span>
     </div>
 
     <ul class="cards">
@@ -261,6 +246,7 @@ onUnmounted(() => {});
         <div class="number">00{{ index+1 }}</div>
         <div class="title">{{ work.company_name }}</div>
         <div class="content">
+          <div class="bg-overlay"></div>
           <img :src="work.image_url" alt="" />
         </div>
       </li>
@@ -273,12 +259,20 @@ onUnmounted(() => {});
 * {
   box-sizing: border-box;
 }
+.main-title {
+  font-family: sectionTitleFont;
+  font-size: 20px;
+  color: var(--vt-c-black);
+  padding-top: 20px;
+  padding-left: 30px;
+}
 .progress-section {
   
   display: flex;
+  flex-direction: column-reverse;
   gap: 10px;
   position: absolute;
-  bottom: 15%;
+  top: 15%;
   right: 5%;
   align-items: center;
 }
@@ -288,14 +282,14 @@ onUnmounted(() => {});
   align-items: center;
   width: 70px;
   height: 2px;
-  background-color: rgba(255, 255, 255, 0.158);
+  background-color: rgba(0, 0, 0, 0.21);
 }
 .progress-span::after {
   content: "";
   top: 50%;
   width: calc(var(--progress-width) + 14%);
   height: 2px;
-  background-color: var(--vt-c-black);
+  background-color: black;
   transition: all 0.5s ease-out;
 }
 .title {
@@ -305,24 +299,20 @@ onUnmounted(() => {});
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  font-size: 3rem;
-
+  align-items: end;
+  font-size: 2.5rem;
   font-weight: bold;
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: white;
-  color: transparent;
-  z-index: 1;
+  color: white;
+  z-index: 2;
   transition: all 300ms ease-out;
   -webkit-transition: all 300ms ease-out;
-  line-height: 115px;
-  text-align: start;
+  text-align: center;
 }
 .number {
   position: absolute;
-  top: -20%;
+  top: -10%;
   left: 5%;
-  font-size: 1.5rem;
+  font-size: 1rem;
   opacity: 0.7;
 }
 .content > img {
@@ -330,11 +320,21 @@ onUnmounted(() => {});
   z-index: 0;
   transition: all 0.25s ease-out;
   object-fit: cover;
-  height: 100%  ;
+  height: 100%;
+  width: 100%;
 }
 .content {
   overflow: hidden;
   height: 100%;
+  border-radius: 0.8rem;
+}
+.bg-overlay {
+  position: absolute;
+  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7567401960784313) 1%, rgba(0,0,0,0) 50%);
+  border-radius: 0.8rem;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
 }
 li:hover img {
   transform: scale(1.15);
@@ -358,8 +358,8 @@ body {
 .cards {
   position: absolute;
   width: 500px;
-  height: 400px;
-  top: 40%;
+  height: 350px;
+  top: 50%;
   left: 50%;
   transform: translate(-30%, -50%);
 }
@@ -369,11 +369,10 @@ body {
   padding: 0;
   margin: 0;
   width: 300px;
-  height: 400px;
+  height: 350px;
   text-align: center;
   font-size: 2rem;
   font-family: sans-serif;
-  background-color: #9d7cce;
   position: absolute;
   top: 0;
   left: 0;
@@ -381,8 +380,6 @@ body {
 }
 .cards li:hover .title {
   color: white;
-  -webkit-text-stroke-width: 0px;
-  -webkit-text-stroke-color: none;
   transform: scale(0.9) !important;
   opacity: 0.8 !important;
 

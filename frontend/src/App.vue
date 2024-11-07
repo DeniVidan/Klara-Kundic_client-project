@@ -1,6 +1,4 @@
 <script setup>
-import HelloWorld from "./components/HelloWorld.vue";
-import TheWelcome from "./components/TheWelcome.vue";
 import Navbar from "./components/Navbar.vue";
 import { onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
