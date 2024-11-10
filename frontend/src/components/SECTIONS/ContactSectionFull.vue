@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
 import { onMounted } from "vue";
 
+
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
 defineProps({});
@@ -15,9 +16,10 @@ onMounted(() => {
 
 <template>
   <div class="wrapper">
-    <!-- <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" /> -->
-    <div class="title">contact me</div>
+    <div class="text-divider">Get in contact with me by filling out the form or use another way to contact me below</div>
+    
     <div class="form-wraper">
+      <div class="big-text">let's talk!</div>
       <div class="form">
         <div class="name">
           <div class="firstname"><input placeholder="Firstname" type="text" /></div>
@@ -26,21 +28,24 @@ onMounted(() => {
         <div class="email"><input placeholder="E-mail" type="text" /></div>
         <div class="message"><textarea placeholder="Message" rows="10"></textarea></div>
         <div class="button">SEND</div>
-        <div class="hero-text"><h1>Let me paint your canvas</h1></div>
+        <!--  -->
       </div>
     </div>
+    <div class="text-divider">Make it memorable.</div>
+    <div class="additional-contact">
+      <div class="title">additional contact</div>
+      <div class="contacts">
+        <div class="email-contact"><span><img src="@/assets/images/email-icon.png" alt=""></span>kk@gmail.com</div>
+        <div class="phone-contact"><span><img src="@/assets/images/telephone-icon.png" alt=""></span>+38598123456</div>
+      </div>
+    </div>
+    <div class="hero-text"><h1>Let me paint your canvas</h1></div>
+    
   </div>
 </template>
 
 <style scoped>
-/* .bg-img {
-  position: fixed;
-  width: 175%;
-  z-index: -1;
-  left: 0;
-  top: 0;
-  filter: brightness(0.4);
-} */
+
 .wrapper {
   color: var(--vt-c-white-soft);
   height: 100vh;
@@ -49,15 +54,66 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 50px;
-  justify-content: center;
+  justify-content: start;
+  margin-top: 50px;
+}
+.text-divider {
+  text-align: center;
+  width: 80%;
+  padding: 20px 0px;
 }
 .title {
   font-family: sectionTitleFont;
+  font-size: 40px;
+  color: var(--vt-c-black);
+  display: flex;
+  justify-content: center;
+}
+.big-text {
+  font-family: sectionTitleFont;
   font-size: 60px;
   color: var(--vt-c-white-soft);
+  width: 100%;
+  text-align: start;
+
+}
+.additional-contact {
+  background-color: rgba(255, 255, 255, 0.486);
+  backdrop-filter: blur(10px);
+
+  padding: 40px 0px;
+  display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 90%;
+    border-radius: 10px;
+    
+}
+.email-contact, .phone-contact{
+  display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+.email-contact span, .phone-contact span {
+  display: flex;
+}
+.email-contact span img, .phone-contact span img{
+  width: 20px;
+  opacity: 0.7;
+}
+
+
+.contacts {
+  color: var(--vt-c-black);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px
 }
 .form-wraper {
-  width: 80%;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -73,8 +129,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 10px;
-  
+  gap: 10px
 }
 .firstname, .lastname, .email {
     display: flex;
@@ -100,6 +155,7 @@ input {
     border: none;
     color: rgb(255, 255, 255);
     padding: 0;
+
     
 }
 
@@ -118,13 +174,14 @@ textarea {
 
 input::placeholder, textarea::placeholder {
     color: var(--vt-c-white-soft);
-    font-family:Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    
     align-self: end;
     /* padding-left: 10px; */
     /* font-size: 17px; */
     position: absolute;
     bottom: 5px;
-    left: 10px
+    left: 10px;
+    transition: 200ms all ease-out;
 }
 
 input:focus, textarea:focus {

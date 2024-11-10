@@ -34,25 +34,33 @@ onMounted(() => {
       stagger: 0.2,
     });
   });
+
   let selected_image = undefined;
-  let images = gsap.utils.toArray(".image img");
-  images.forEach((image, index) => {
-    image.addEventListener("click", () => {
-      image.classList.add("image-focus");
-      selected_image = image
-    });
-  });
+let images = gsap.utils.toArray(".image img");
 
-  document.addEventListener("click", (e) => {
+images.forEach((image) => {
+  image.addEventListener("click", (event) => {
+    event.stopPropagation(); // Prevent event from propagating to the document
 
-          if(selected_image != undefined) {
-      console.log("tusmo", selected_image)
+    // If there is already a selected image, remove focus from it
+    if (selected_image) {
       selected_image.classList.remove("image-focus");
-
+      selected_image.style.transition = "200ms all";
     }
 
-    
-  })
+    // Apply focus to the clicked image
+    image.classList.add("image-focus");
+    selected_image = image;
+  });
+});
+
+document.addEventListener("click", () => {
+  if (selected_image) {
+    selected_image.classList.remove("image-focus");
+    selected_image.style.transition = "200ms all";
+    selected_image = undefined;
+  }
+});
 
   images.forEach((image, index) => {
     gsap.fromTo(
@@ -143,7 +151,7 @@ onUnmounted(() => {});
         problem, hit me up, lets talk!
       </div>
     </div>
-    <div class="additional-section">
+    <div class="additional-section" style="height: 60vh;">
       <div class="title-2 show-anim">more about Klara...</div>
       <div class="content show-anim">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
@@ -208,7 +216,7 @@ span img {
 .bg-image img {
   width: 100%;
   position: absolute;
-  transition: 200ms all ease-in-out;
+
 }
 .images-section {
   overflow-x: hidden;

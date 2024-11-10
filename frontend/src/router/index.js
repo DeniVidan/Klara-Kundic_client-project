@@ -12,6 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import { Service, Auth } from "@/../services/service";
 import { getCurrentUser } from "@/firebase/init";
+import WorkDetail from "@/views/WorkDetail.vue";
 
 
 const auth = useFirebaseAuth()
@@ -48,6 +49,12 @@ const routes = [
     path: "/register",
     name: "register",
     component: Register,
+  },
+  {
+    path: `/mywork/:id`,
+    name: "workdetail",
+    component: WorkDetail,
+    props: true
   },
 ];
 

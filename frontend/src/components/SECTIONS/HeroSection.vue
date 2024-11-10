@@ -40,6 +40,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
+* {
+  font-family: 'Times New Roman', serif;
+}
 .wrapper {
   color: var(--vt-c-white-soft);
   height: 100vh;

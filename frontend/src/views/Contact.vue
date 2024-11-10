@@ -1,17 +1,24 @@
 <script setup>
 import { onMounted, onUnmounted, ref, render } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
+import ContactSectionFull from "@/components/SECTIONS/ContactSectionFull.vue";
+import FooterSection from "@/components/SECTIONS/FooterSection.vue";
 
 
-
+gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(Draggable);
 
 defineProps({});
 
 const router = useRouter();
 const route = useRoute();
 
-onMounted(() => {
 
+
+onMounted(() => {
 
 });
 
@@ -19,66 +26,35 @@ onUnmounted(() => {});
 </script>
 <template>
   <div class="wrapper">
-    CONTACT
+    <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" />
+    <div class="title">contact me</div>
+    <ContactSectionFull />
+    <FooterSection style="margin-top: 450px;" />
   </div>
 </template>
 
 <style scoped>
 
-@font-face {
-  font-family: Glamora;
-  src: url(../assets/fonts/GLAMORA.otf) format("truetype");
+.wrapper {
+  display: flex;
+width: 100vw;
+/* background-color: var(--color-background); */
+
 }
-@font-face {
-  font-family: Sinera;
-  src: url(../assets/fonts/Sinera.ttf) format("truetype");
+.bg-img {
+  position: fixed;
+  width: 175%;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  filter: brightness(0.4);
 }
-@font-face {
-  font-family: Pavon;
-  src: url(../assets/fonts/Pavon.otf) format("truetype");
-}
-@font-face {
-  font-family: ExcaliburNouveau;
-  src: url(../assets/fonts/Excalibur_Nouveau.ttf) format("truetype");
-}
-@font-face {
-  font-family: RCDemo;
-  src: url(../assets/fonts/R&C-Demo.otf) format("truetype");
-}
-@font-face {
-  font-family: LazySketch;
-  src: url(../assets/fonts/Lazy_Sketch.ttf) format("truetype");
-}
-@font-face {
-  font-family: MonasDemo;
-  src: url(../assets/fonts/Monas_Demo.ttf) format("truetype");
-}
-@font-face {
-  font-family: moniqua;
-  src: url(../assets/fonts/Variable-TT/font1.ttf) format("truetype");
-}
-@font-face {
-  font-family: moniqua2;
-  src: url(../assets/fonts/OpenType/Moniqa-ExtraBoldDisplay.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: moniquaItalic;
-  src: url(../assets/fonts/OpenType/Moniqa-NarrowItalicDisplay.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: buttonFont;
-  src: url(../assets/fonts/OpenType/Moniqa-BlackHeading.ttf) format("truetype");
-}
-@font-face {
-  font-family: regularMoniqua;
-  src: url(../assets/fonts/OpenType/Moniqa-MediumItalicParagraph.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: moniquaCardTitle;
-  src: url(../assets/fonts/OpenType/Moniqa-BlackCondParagraph.ttf)
-    format("truetype");
+
+.title {
+  font-family: sectionTitleFont;
+  font-size: 20px;
+  color: var(--vt-c-white-soft);
+  padding-top: 20px;
+  padding-left: 30px;
 }
 </style>

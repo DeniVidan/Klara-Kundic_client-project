@@ -36,17 +36,27 @@ onMounted(() => {
       <div class="quotation-mark-2">
         <img src="@/assets/images/quote2.png" alt="" />
       </div>
+
       <p>
-        Vašu ljubavnu priču pretvaram u umjetnost, potez po potez. Bilo da se
-        radi o uživoskicama na dan vjenčanja ili personaliziranim slikama koje
-        odražavaju vašu jedinstvenu povezanost, stvaram bezvremenska djela koja
-        pričaju vašu priču.
+        <span>
+          <strong>Vašu ljubavnu priču</strong> pretvaram u umjetnost, potez po
+          potez. <br /> <br>
+          <strong>Skicama uživo na dan vjenčanja</strong> stvaram bezvremenska djela
+          koja pričaju vašu priču.
+        </span>
       </p>
     </div>
   </div>
 </template>
 
 <style scoped>
+* {
+  font-family: "Times New Roman", serif;
+}
+strong {
+  font-weight: bold;
+  color: var(--beige-detail-color);
+}
 .wrapper {
   color: var(--vt-c-white-soft);
   min-height: 100vh;
@@ -98,18 +108,19 @@ onMounted(() => {
   align-items: center;
   height: 80vh;
   margin: 0px 20px;
-  font-size: 26px;
+  font-size: 1.5rem;
   line-height: 1.3;
   color: var(--vt-c-black);
 }
+
 .quotation-mark-1 {
   position: absolute;
-  top: 70px;
+  top: 10px;
   left: -100px;
 }
 .quotation-mark-2 {
   position: absolute;
-  bottom: 90px;
+  bottom: 10px;
   right: -100px;
 }
 @media (min-width: 1024px) {
