@@ -14,6 +14,7 @@ import PageBreak from "@/components/braker/PageBreak.vue";
 import landingText from "@/assets/data-cards/landingText.json";
 import ContactSection from "@/components/SECTIONS/ContactSection.vue";
 import FooterSection from "@/components/SECTIONS/FooterSection.vue";
+import Carousel1 from "@/components/carousel/Carousel1.vue";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
@@ -27,13 +28,7 @@ const auth = useFirebaseAuth();
 /* console.log(auth.currentUser) */
 
 onMounted(() => {
-/*   ScrollTrigger.create({
-    trigger: ".footer",
-    pin: true,
-    start: "bottom bottom",
-    end: "+=100%",
-    markers: true,
-  }); */
+
 });
 
 onUnmounted(() => {});
@@ -43,7 +38,8 @@ onUnmounted(() => {});
     <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" />
     <HeroSection style="position: relative; z-index: 2" />
     <AboutSection style="position: relative; z-index: 1" />
-    <ServicesSection style="position: relative; z-index: 1" />
+    <!-- <ServicesSection style="position: relative; z-index: 1" /> -->
+     <Carousel1 style="position: relative; z-index: 1"/>
     <DetailsSection style="position: relative; z-index: 1" />
     <PageBreak
       :msg="landingText[0].text"

@@ -25,7 +25,7 @@ onMounted(() => {
     gsap.from(array, {
       scrollTrigger: {
         trigger: section,
-        markers: true,
+        //markers: true,
         start: "center bottom",
         toggleActions: "play play pause reverse",
       },

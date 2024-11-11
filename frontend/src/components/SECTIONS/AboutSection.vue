@@ -64,7 +64,7 @@ strong {
   background-color: var(--color-background);
   display: flex;
   flex-direction: column;
-  gap: 500px;
+  gap: 400px;
 }
 .shape {
   width: 200%;

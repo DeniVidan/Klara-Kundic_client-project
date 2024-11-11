@@ -80,7 +80,7 @@ onMounted(() => {
 .wrapper {
   background-color: var(--color-background);
   color: var(--vt-c-white-soft);
-  min-height: 80vh;
+  min-height: 100vh;
   width: 100vw;
   align-items: center;
   display: flex;
@@ -91,7 +91,7 @@ onMounted(() => {
   font-family: sectionTitleFont;
   font-size: 60px;
   color: var(--vt-c-black);
-
+  
 }
 .card-wrap {
   display: flex;
