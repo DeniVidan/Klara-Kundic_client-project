@@ -79,13 +79,28 @@ onMounted(() => {
   // Add drag event listeners
   carousel.value.addEventListener("mousedown", startDrag);
   carousel.value.addEventListener("touchstart", startDrag);
+
+
+
+  gsap.from(".title-in-anim", {
+      scrollTrigger: {
+        trigger: ".title-in-anim",
+        //markers: true,
+        start: "center bottom",
+        toggleActions: "play play pause reverse",
+      },
+      opacity: 0,
+    });
+
+
+
 });
 
 onUnmounted(() => {});
 </script>
 <template>
   <div class="wrapper">
-    <div class="title">what i offer...</div>
+    <div class="title title-in-anim">what i offer...</div>
     <div class="carousel-container">
       <!--       <button
         :class="['arrow', 'arrow-left', { disabled: currentIndex === 0 }]"

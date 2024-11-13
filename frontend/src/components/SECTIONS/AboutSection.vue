@@ -8,21 +8,46 @@ gsap.registerPlugin(ScrollTrigger);
 defineProps({});
 
 onMounted(() => {
-  /*   ScrollTrigger.create({
-    trigger: ".brand-name",
-    start: "top top", //top+100
-    end: "max",
-    pin: true,
-    pinSpacing: false,
-    markers: true,
-  }); */
+  let sections = gsap.utils.toArray(".item-in-anim");
+  let quotation_marks = gsap.utils.toArray(".quotation-mark-1, .quotation-mark-2")
+  quotation_marks.forEach(quote => {
+    gsap.from(quote, {
+      scrollTrigger: {
+        trigger: quote,
+        //markers: true,
+        start: "center bottom",
+        toggleActions: "play play pause reverse",
+      },
+      opacity: 0,
+      y: 100,
+      stagger: 0.2,
+    });
+  });
+
+
+
+
+  sections.forEach((section, index) => {
+
+    gsap.from(section.childNodes, {
+      scrollTrigger: {
+        trigger: section,
+        //markers: true,
+        start: "center bottom",
+        toggleActions: "play play pause reverse",
+      },
+      opacity: 0,
+      y: 100,
+      stagger: 0.2,
+    });
+  });
 });
 </script>
 
 <template>
   <div class="wrapper">
     <div class="shape"></div>
-    <div class="first-part">
+    <div class="first-part item-in-anim">
       <div class="title">I'm Klara</div>
       <div class="about-image">
         <img src="@/assets/images/klara-image.jpg" alt="" />
@@ -37,7 +62,7 @@ onMounted(() => {
         <img src="@/assets/images/quote2.png" alt="" />
       </div>
 
-      <p>
+      <p class="item-in-anim">
         <span>
           <strong>Vašu ljubavnu priču</strong> pretvaram u umjetnost, potez po
           potez. <br /> <br>

@@ -92,13 +92,27 @@ onMounted(() => {
   // Add drag event listeners
   carousel.value.addEventListener("mousedown", startDrag);
   carousel.value.addEventListener("touchstart", startDrag);
+
+
+
+  gsap.from(".workSection-item-show-anim", {
+      scrollTrigger: {
+        trigger: ".workSection-item-show-anim",
+        //markers: true,
+        start: "center bottom",
+        toggleActions: "play play pause reverse",
+      },
+      opacity: 0,
+    });
+
+
 });
 
 onUnmounted(() => {});
 </script>
 <template>
   <div class="wrapper">
-    <div class="title">what can i do...</div>
+    <div class="title workSection-item-show-anim">what can i do...</div>
     <div class="carousel-container">
       <button
         :class="['arrow', 'arrow-left', { disabled: currentIndex === 0 }]"

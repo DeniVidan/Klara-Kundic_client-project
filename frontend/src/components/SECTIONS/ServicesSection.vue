@@ -37,24 +37,6 @@ onMounted(() => {
   })
 
 
-/* 
-    gsap.to(".services-wrapper", {
-      x: -300,
-      delay: 1,
-      scrollTrigger: {
-        trigger: ".carousel",
-        pin:true,
-        pinSpacing: false,
-        scrub: 1,
-        start: "top top",
-        end: "center bottom",
-        toggleActions: "play complete reverse reset",
-        markers: true
-      }
-    })
- */
-
-
 });
 </script>
 

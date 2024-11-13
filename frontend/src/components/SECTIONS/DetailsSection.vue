@@ -7,14 +7,29 @@ gsap.registerPlugin(ScrollTrigger);
 
 defineProps({});
 
-onMounted(() => {});
+onMounted(() => {
+  let sections = gsap.utils.toArray(".detail-item-show-anim")
+  sections.forEach(element => {
+    gsap.from(element, {
+      scrollTrigger: {
+        trigger: element,
+        //markers: true,
+        start: "center bottom",
+        toggleActions: "play play pause reverse",
+      },
+      opacity: 0,
+    });
+  });
+
+  
+});
 </script>
 
 <template>
   <div class="wrapper">
-    <div class="title">attention to detail</div>
+    <div class="title detail-item-show-anim">attention to detail</div>
     <div class="items-wrapper">
-      <div class="item">
+      <div class="item detail-item-show-anim">
         <div class="item-image">
           <img src="@/assets/images/detail1.png" alt="" />
         </div>
@@ -24,7 +39,7 @@ onMounted(() => {});
           </ul>
         </div>
       </div>
-      <div class="item">
+      <div class="item detail-item-show-anim">
         <div class="item-image">
           <img src="@/assets/images/detail2.png" alt="" />
         </div>

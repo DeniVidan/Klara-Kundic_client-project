@@ -1,418 +1,262 @@
 <script setup>
-import { onMounted, onUnmounted, ref, render } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import fakedata from "@/assets/data-cards/fakedata.json";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Draggable } from "gsap/Draggable";
-import workData from "../assets/data-cards/fakedata.json";
-import { useRouter, useRoute } from "vue-router";
 
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(Draggable);
+let works = ref(fakedata);
+const carousel = ref(null);
+const currentIndex = ref(0);
 
-const router = useRouter();
-const route = useRoute();
+const itemWidth = ref(0);
+const containerWidth = ref(0);
+let startX;
 
-let progress_count = ref("001");
-let works = ref(workData);
+const progress = computed(() => currentIndex.value + 1);
+const progressBarWidth = computed(() => (progress.value / works.value.length) * 100);
 
-function opanSingleCard(item) {
-  //console.log(item);
+function updateCarousel() {
+  const maxIndex = works.value.length - 1;
+  currentIndex.value = Math.max(0, Math.min(currentIndex.value, maxIndex));
+
+  const translateX =
+    -currentIndex.value * itemWidth.value +
+    (containerWidth.value - itemWidth.value) / 2;
+  carousel.value.style.transform = `translateX(${translateX}px)`;
+}
+
+// Animate text overlay on carousel change
+const textOverlay = ref(null);
+watch(currentIndex, () => {
+  gsap.to(textOverlay.value, { opacity: 0, duration: 0.3, onComplete: () => {
+    textOverlay.value.innerText = works.value[currentIndex.value].company_name;
+    gsap.to(textOverlay.value, { opacity: 1, duration: 0.2 });
+  } });
+});
+
+function moveCarousel(direction) {
+  currentIndex.value += direction;
+  updateCarousel();
+}
+
+function startDrag(e) {
+  startX = e.touches ? e.touches[0].clientX : e.clientX;
+  document.addEventListener("mousemove", drag);
+  document.addEventListener("mouseup", endDrag);
+  document.addEventListener("touchmove", drag);
+  document.addEventListener("touchend", endDrag);
+}
+
+function drag(e) {
+  const x = e.touches ? e.touches[0].clientX : e.clientX;
+  const delta = x - startX;
+  const translateX =
+    -currentIndex.value * itemWidth.value +
+    (containerWidth.value - itemWidth.value) / 2 +
+    delta;
+  carousel.value.style.transform = `translateX(${translateX}px)`;
+}
+
+function endDrag(e) {
+  const x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+  const delta = x - startX;
+  if (Math.abs(delta) > itemWidth.value / 4) {
+    currentIndex.value -= Math.sign(delta);
+  }
+  updateCarousel();
+  document.removeEventListener("mousemove", drag);
+  document.removeEventListener("mouseup", endDrag);
+  document.removeEventListener("touchmove", drag);
+  document.removeEventListener("touchend", endDrag);
 }
 
 onMounted(() => {
-  let progressSpan = document.querySelector(".progress-span");
-  progressSpan.style.setProperty("--progress-width", "70%");
-  let iteration = 0; // gets iterated when we scroll all the way to the end or start and wraps around - allows us to smoothly continue the playhead scrubbing in the correct direction.
+  // Initial setup for item and container width
+  itemWidth.value = carousel.value.querySelector(".carousel-item").offsetWidth + 20;
+  containerWidth.value = document.querySelector(".carousel-container").offsetWidth;
 
-  // set initial state of items
-  gsap.set(".cards li", { xPercent: 250, opacity: 0, scale: 0 });
-  gsap.set(".title", { opacity: 0, xPercent: 100 });
+  updateCarousel();
 
-  const spacing = 0.12, // spacing of the cards (stagger)
-    snapTime = gsap.utils.snap(spacing), // we'll use this to snapTime the playhead on the seamlessLoop
-    cards = gsap.utils.toArray(".cards li"),
-    // this function will get called for each element in the buildSeamlessLoop() function, and we just need to return an animation that'll get inserted into a master timeline, spaced
-    animateFunc = (element, index) => {
-      const tl = gsap.timeline();
-      tl.fromTo(
-        element,
-        { scale: -3, opacity: -5 },
-        {
-          scale: 1,
-          opacity: 1,
-          zIndex: 100,
-          duration: 0.5,
-          yoyo: true,
-          repeat: 1,
-          ease: "power1.out",
-          immediateRender: false,
+  // Initial fade-in for the first title
+  textOverlay.value.innerText = works.value[currentIndex.value].company_name;
+  gsap.fromTo(textOverlay.value, { opacity: 0 }, { opacity: 1, duration: 0.3 });
 
-          onUpdate: () => {
-            //console.log("d")
-            // Controlla se la card è al centro (xPercent vicino a 0)
-            const progress = tl.progress();
-
-            if (progress >= 0.33 && progress <= 0.55) {
-              /* console.log("1") */
-              // Se la card è centrale, mostra il titolo
-              //console.log(progress)
-              gsap.to(element.querySelector(".title"), {
-                xPercent: 0,
-                opacity: 1,
-                duration: 0.2,
-              });
-            } else if (progress <= 0.33) {
-              /* console.log("2") */
-              gsap.to(element.querySelector(".title"), {
-                opacity: 0,
-                duration: 1,
-              });
-            } else if (progress >= 0.33) {
-              /* console.log("3") */
-              gsap.to(element.querySelector(".title"), {
-                opacity: 1,
-                duration: 1,
-              });
-            }
-          },
-        }
-      ).fromTo(
-        element,
-        { xPercent: 400 },
-        { xPercent: -400, duration: 1, ease: "none", immediateRender: false },
-        0
-      );
-      return tl;
-    },
-    seamlessLoop = buildSeamlessLoop(cards, spacing, animateFunc),
-    playhead = { offset: 0 }, // a proxy object we use to simulate the playhead position, but it can go infinitely in either direction and we'll just use an onUpdate to convert it to the corresponding time on the seamlessLoop timeline.
-    wrapTime = gsap.utils.wrap(0, seamlessLoop.duration()), // feed in any offset (time) and it'll return the corresponding wrapped time (a safe value between 0 and the seamlessLoop's duration)
-    scrub = gsap.to(playhead, {
-      // we reuse this tween to smoothly scrub the playhead on the seamlessLoop
-      offset: 0,
-      onUpdate() {
-        seamlessLoop.time(wrapTime(playhead.offset)); // convert the offset to a "safe" corresponding time on the seamlessLoop timeline
-      },
-      duration: 0.5,
-      ease: "power3.out",
-      paused: true,
-    }),
-    trigger = ScrollTrigger.create({
-      start: 0,
-      onUpdate(self) {
-        let numbers = gsap.utils.toArray(".number");
-        let num_length = numbers.length;
-
-        let scroll = self.scroll();
-
-        progress_count.value =
-          "00" + Math.floor(Math.floor(self.progress * 100) / 14 + 1);
-
-        progressSpan.style.setProperty(
-          "--progress-width",
-          Math.floor(self.progress * 100) + "%"
-        );
-        if (scroll > self.end - 1) {
-          wrap(1, 2);
-        } else if (scroll < 1 && self.direction < 0) {
-          wrap(-1, self.end - 2);
-        } else {
-          scrub.vars.offset =
-            (iteration + self.progress) * seamlessLoop.duration();
-          scrub.invalidate().restart(); // to improve performance, we just invalidate and restart the same tween. No need for overwrites or creating a new tween on each update.
-        }
-      },
-      end: "+=8000",
-      pin: ".gallery",
-    }),
-    // converts a progress value (0-1, but could go outside those bounds when wrapping) into a "safe" scroll value that's at least 1 away from the start or end because we reserve those for sensing when the user scrolls ALL the way up or down, to wrap.
-    progressToScroll = (progress) =>
-      gsap.utils.clamp(
-        1,
-        trigger.end - 1,
-        gsap.utils.wrap(0, 1, progress) * trigger.end
-      ),
-    wrap = (iterationDelta, scrollTo) => {
-      iteration += iterationDelta;
-      trigger.scroll(scrollTo);
-      trigger.update(); // by default, when we trigger.scroll(), it waits 1 tick to update().
-    };
-
-  // when the user stops scrolling, snap to the closest item.
-  ScrollTrigger.addEventListener("scrollEnd", () => {
-    scrollToOffset(scrub.vars.offset);
-  });
-
-  // feed in an offset (like a time on the seamlessLoop timeline, but it can exceed 0 and duration() in either direction; it'll wrap) and it'll set the scroll position accordingly. That'll call the onUpdate() on the trigger if there's a change.
-  function scrollToOffset(offset) {
-    // moves the scroll playhead to the place that corresponds to the totalTime value of the seamlessLoop, and wraps if necessary.
-    let snappedTime = snapTime(offset),
-      progress =
-        (snappedTime - seamlessLoop.duration() * iteration) /
-        seamlessLoop.duration(),
-      scroll = progressToScroll(progress);
-
-    if (progress >= 1 || progress < 0) {
-      return wrap(Math.floor(progress), scroll);
-    } else {
-      //console.log("evo: ", progress)
-    }
-    trigger.scroll(scroll);
-  }
-
-  /* document.querySelector(".next").addEventListener("click", () => scrollToOffset(scrub.vars.offset + spacing));
-document.querySelector(".prev").addEventListener("click", () => scrollToOffset(scrub.vars.offset - spacing));
- */
-
-  function buildSeamlessLoop(items, spacing, animateFunc) {
-    let rawSequence = gsap.timeline({ paused: true }), // this is where all the "real" animations live
-      seamlessLoop = gsap.timeline({
-        // this merely scrubs the playhead of the rawSequence so that it appears to seamlessly loop
-        paused: true,
-
-        repeat: -1, // to accommodate infinite scrolling/looping
-        onRepeat() {
-          // works around a super rare edge case bug that's fixed GSAP 3.6.1
-          this._time === this._dur && (this._tTime += this._dur - 0.1);
-        },
-        onReverseComplete() {
-          this.totalTime(this.rawTime() + this.duration() * 100); // seamless looping backwards
-        },
-      }),
-      cycleDuration = spacing * items.length,
-      dur; // the duration of just one animateFunc() (we'll populate it in the .forEach() below...
-
-    // loop through 3 times so we can have an extra cycle at the start and end - we'll scrub the playhead only on the 2nd cycle
-    items
-      .concat(items)
-      .concat(items)
-      .forEach((item, i) => {
-        let anim = animateFunc(items[i % items.length]);
-        /* console.log(item.querySelector(".title")) */
-
-        rawSequence.add(anim, i * spacing);
-
-        dur || (dur = anim.duration());
-      });
-
-    // animate the playhead linearly from the start of the 2nd cycle to its end (so we'll have one "extra" cycle at the beginning and end)
-    seamlessLoop.fromTo(
-      rawSequence,
-      {
-        time: cycleDuration + dur / 2,
-      },
-      {
-        time: "+=" + cycleDuration,
-        duration: cycleDuration,
-
-        ease: "none",
-      }
-    );
-
-    return seamlessLoop;
-  }
-
-  // below is the dragging functionality (mobile-friendly too)...
-  Draggable.create(".drag-proxy", {
-    type: "x",
-    trigger: ".cards",
-    onPress() {
-      this.startOffset = scrub.vars.offset;
-    },
-    onDrag() {
-      scrub.vars.offset = this.startOffset + (this.startX - this.x) * 0.001;
-      /*scrub.invalidate().restart();  same thing as we do in the ScrollTrigger's onUpdate */
-    },
-    onDragEnd() {
-      scrollToOffset(scrub.vars.offset);
-    },
-  });
+  // Event listeners for dragging functionality
+  carousel.value.addEventListener("mousedown", startDrag);
+  carousel.value.addEventListener("touchstart", startDrag);
 });
 
-onUnmounted(() => {});
+onUnmounted(() => {
+  carousel.value.removeEventListener("mousedown", startDrag);
+  carousel.value.removeEventListener("touchstart", startDrag);
+});
 </script>
 
+
 <template>
-  <div class="gallery">
-    <div class="main-title">my work</div>
-    <div style="position: absolute; bottom: 15%; left: 5%; font-size: 20px">
-      all projects
+  <div class="wrapper">
+    <div class="title">what can i do...</div>
+    <div class="progress-wrapper">
+      <div class="progress">{{ progress + "/" + works.length }}</div>
+      <div class="progress-container">
+        <div class="progress-bar" :style="{ width: progressBarWidth + '%' }"></div>
+      </div>
     </div>
-    <div class="progress-section">
-      <div class="progress-span"></div>
-      <span>{{ progress_count }}/007</span>
+    <div class="carousel-container">
+      <button
+        :class="['arrow', 'arrow-left', { disabled: currentIndex === 0 }]"
+        @click="moveCarousel(-1)"
+      >
+        ❮
+      </button>
+      <div class="carousel" ref="carousel">
+        <div v-for="(work, index) in works" :key="index" :class="['carousel-item', { active: index === currentIndex }]">
+          <img :src="work.image_url" alt="" />
+        </div>
+      </div>
+      <button
+        :class="['arrow', 'arrow-right', { disabled: currentIndex === works.length - 1 }]"
+        @click="moveCarousel(1)"
+      >
+        ❯
+      </button>
     </div>
 
-    <ul class="cards">
-      <li v-for="(work, index) in works" :key="work.id">
-        <router-link
-          :to="{ name: 'workdetail', params: { id: work.id } }"
-          :work="work"
-          @click="opanSingleCard(work)"
-          class=".card-wrapper"
-          style=""
-        >
-          <div class="number" :image-id="work.id">00{{ index + 1 }}</div>
-          <div class="title">{{ work.company_name }}</div>
-          <div class="content" :id="work.id">
-            <div class="bg-overlay"></div>
-            <img :src="work.image_url" alt="" />
-          </div>
-        </router-link>
-      </li>
-    </ul>
+    <!-- Fixed Text Overlay -->
+    <div class="centered-text">
+      <div ref="textOverlay" class="item-title">{{ works[currentIndex]?.company_name }}</div>
+    </div>
   </div>
-  <div class="drag-proxy"></div>
 </template>
-
 <style scoped>
-* {
-  box-sizing: border-box;
+.wrapper {
+  background-color: var(--color-background);
+  color: var(--vt-c-white-soft);
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
-.main-title {
+.active .item-title {
+  color: red;
+}
+.title {
   font-family: sectionTitleFont;
   font-size: 20px;
   color: var(--vt-c-black);
   padding-top: 20px;
   padding-left: 30px;
 }
-.progress-section {
+.progress-wrapper {
   display: flex;
-  flex-direction: column-reverse;
   gap: 10px;
-  position: absolute;
-  top: 15%;
-  right: 5%;
-  align-items: center;
+  justify-content: end;
+  margin-right: 10px;
 }
-.progress-span {
-  --progress-width: 17px;
+.progress-container {
+  width: 70px;
+  height: 3px;
+  background-color: #b3b3b3;
+  border-radius: 4px;
+  margin: 10px 0;
+  display: flex;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--vt-c-black);
+  transition: width 0.3s ease;
+}
+
+.progress {
+  color: black;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100vw;
   display: flex;
   align-items: center;
-  width: 70px;
-  height: 2px;
-  background-color: rgba(0, 0, 0, 0.21);
 }
-.progress-span::after {
-  content: "";
-  top: 50%;
-  width: calc(var(--progress-width) + 14%);
-  height: 2px;
-  background-color: black;
-  transition: all 0.5s ease-out;
+
+.carousel {
+  display: flex;
+  transition: transform 0.5s ease;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
 }
-a {
-  padding: 0 !important;
-  color: black !important;
-}
-.title {
-  position: absolute;
-  height: 100%;
-  width: 100%;
+
+.carousel-item {
+  position: relative;
+  min-width: 60vw;
+  flex-shrink: 0;
+  height: 300px;
+  background-color: #ddd;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
-  align-items: end;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: white;
-  z-index: 2;
-  transition: all 300ms ease-out;
-  -webkit-transition: all 300ms ease-out;
-  text-align: center;
+  align-items: center;
+  font-size: 24px;
+  scroll-snap-align: center;
+  transition: opacity 0.5s;
+  opacity: 0.5;
 }
-.number {
+
+.carousel-item.active {
+  opacity: 1;
+}
+
+.carousel-item img {
+  height: 100%;
+  width: 100%;
   position: absolute;
-  top: -10%;
-  left: 5%;
-  font-size: 1rem;
-  opacity: 0.7;
-}
-.content > img {
-  filter: brightness(80%);
-  z-index: 0;
-  transition: all 0.25s ease-out;
   object-fit: cover;
-  height: 100%;
-  width: 100%;
+  border-radius: 10px;
 }
-.content {
-  overflow: hidden;
-  height: 100%;
-  border-radius: 0.8rem;
+.item-title {
+  z-index: 3;
+  font-size: 30px;
+  color: var(--vt-c-black);
+  position: relative;
+  bottom: -80px;
+  opacity: 0;
+  transform: scale(0.8);
 }
-.bg-overlay {
+.arrow {
   position: absolute;
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.7567401960784313) 1%,
-    rgba(0, 0, 0, 0) 50%
-  );
-  border-radius: 0.8rem;
-  height: 100%;
-  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: var(--vt-c-black);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 30px;
   z-index: 1;
 }
-li:hover img {
-  transform: scale(1.15);
-  overflow: hidden;
-}
-
-body {
-  background: #111;
-  min-height: 100vh;
-  padding: 0;
-  margin: 0;
-  /*   overflow-x: hidden; */
-}
-.gallery {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.cards {
-  position: absolute;
-  width: 500px;
-  height: 350px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-30%, -50%);
-}
-
-.cards li {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 300px;
-  height: 350px;
-  text-align: center;
-  font-size: 2rem;
-  font-family: sans-serif;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 0.8rem;
-}
-.cards li:hover .title {
-  color: white;
-  transform: scale(0.9) !important;
-  opacity: 0.8 !important;
-
-  transition: all 300ms ease-out;
-  -webkit-transition: all 300ms ease-out;
-}
-
-a {
-  color: #88ce02;
+.arrow:focus {
   text-decoration: none;
 }
-a:hover {
-  text-decoration: underline;
+
+.arrow-left {
+  left: 10px;
 }
-.drag-proxy {
-  visibility: hidden;
-  position: absolute;
+
+.arrow-right {
+  right: 10px;
+}
+
+.arrow.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.centered-text {
+  z-index: 1;
+  font-size: 30px;
+  color: var(--vt-c-black);
+  text-align: center;
+}
+.item-title {
+  transition: opacity 0.2s ease;
 }
 </style>

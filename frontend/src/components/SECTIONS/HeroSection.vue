@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger);
 defineProps({});
 
 onMounted(() => {
-
   let tl = gsap.timeline({
     scrollTrigger: {
       trigger: ".brand-name",
@@ -28,20 +27,31 @@ onMounted(() => {
     duration: 0.5,
     zIndex: 1000,
   });
+  let sections = gsap.utils.toArray(".anim");
+  
+
+  gsap.from(sections, {
+    opacity: 0,
+    y: 100,
+    stagger: 0.15,
+  });
+
+
+
 });
 </script>
 
 <template>
   <div class="wrapper">
-    <div class="brand-name">Klara Kundic</div>
-    <div class="text">Live wedding sketching, gifts, custom orders</div>
-    <div class="button">Let's talk</div>
+    <div class="brand-name anim">Klara Kundic</div>
+    <div class="text anim">Live wedding sketching, gifts, custom orders</div>
+    <div class="button anim">Let's talk</div>
   </div>
 </template>
 
 <style scoped>
 * {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
 }
 .wrapper {
   color: var(--vt-c-white-soft);
@@ -58,7 +68,7 @@ onMounted(() => {
   font-size: 55px;
   cursor: pointer;
   color: var(--vt-c-white-soft);
-  
+
   z-index: 0;
   mix-blend-mode: difference;
 }
