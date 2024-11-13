@@ -15,6 +15,7 @@ import landingText from "@/assets/data-cards/landingText.json";
 import ContactSection from "@/components/SECTIONS/ContactSection.vue";
 import FooterSection from "@/components/SECTIONS/FooterSection.vue";
 import Carousel1 from "@/components/carousel/Carousel1.vue";
+import Carousel2 from "@/components/carousel/Carousel2.vue";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
@@ -45,7 +46,8 @@ onUnmounted(() => {});
       :msg="landingText[0].text"
       style="position: relative; z-index: 1"
     />
-    <WorkSection style="position: relative; z-index: 1" />
+    <<!-- WorkSection style="position: relative; z-index: 1" /> -->
+    <Carousel2 style="position: relative; z-index: 1"/>
     <ContactSection style="position: relative; z-index: 1" />
     <FooterSection class="footer" style="position: relative" />
   </div>

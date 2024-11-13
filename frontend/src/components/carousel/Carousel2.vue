@@ -1,11 +1,24 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, render } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { gsap } from "gsap";
-import servicesData from "@/assets/data-cards/servicesData.json";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
+import TextLoop from "@/components/braker/TextLoop.vue";
+import fakedata from "@/assets/data-cards/fakedata.json";
 
-let services = ref(servicesData);
+gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(Draggable);
 
-// Create refs for carousel and track elements
+defineProps({});
+
+const router = useRouter();
+const route = useRoute();
+
+let works = ref(fakedata);
+
+console.log("works: ", works);
+
 const carousel = ref(null);
 const currentIndex = ref(0);
 
@@ -15,7 +28,7 @@ let startX;
 
 // Functions to update carousel position and apply fade effect
 function updateCarousel() {
-  const maxIndex = services.value.length - 1;
+  const maxIndex = works.value.length - 1;
   if (currentIndex.value <= 0) {
     currentIndex.value = 0;
   } else if (currentIndex.value >= maxIndex) {
@@ -85,40 +98,39 @@ onUnmounted(() => {});
 </script>
 <template>
   <div class="wrapper">
-    <div class="title">what i offer...</div>
+    <div class="title">what can i do...</div>
     <div class="carousel-container">
-      <!--       <button
+      <button
         :class="['arrow', 'arrow-left', { disabled: currentIndex === 0 }]"
         @click="moveCarousel(-1)"
       >
         ❮
-      </button> -->
+      </button>
 
       <div class="carousel" ref="carousel">
         <div
-          v-for="(service, index) in services"
+          v-for="(work, index) in works"
           :key="index"
           :class="['carousel-item', { active: index === currentIndex }]"
         >
-          <div class="layer"></div>
-          <img :src="service.image" alt="" />
+          <img :src="work.image_url" alt="" />
+
           <div class="item-title">
-            {{ service.name }}
+            {{ work.company_name }}
           </div>
-          <div class="item-text">{{ service.text }}</div>
         </div>
       </div>
-      <!-- 
+
       <button
         :class="[
           'arrow',
           'arrow-right',
-          { disabled: currentIndex === services.length - 1 },
+          { disabled: currentIndex === works.length - 1 },
         ]"
         @click="moveCarousel(1)"
       >
         ❯
-      </button> -->
+      </button>
     </div>
   </div>
 </template>
@@ -128,12 +140,11 @@ onUnmounted(() => {});
   background-color: var(--color-background);
   color: var(--vt-c-white-soft);
   min-height: 100vh;
-  /* max-height: 100vh; */
   width: 100vw;
   align-items: center;
   display: flex;
   flex-direction: column;
-  padding-top: 50px;
+    padding-top: 50px;
   gap: 50px;
 }
 .title {
@@ -181,39 +192,12 @@ onUnmounted(() => {});
   object-fit: cover;
   border-radius: 10px;
 }
-.layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 10px;
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.7567401960784313) 8%,
-    rgba(0, 0, 0, 0) 49%
-  );
-  width: 100%;
-  z-index: 1;
-  height: 100%;
-}
 .item-title {
   z-index: 3;
   font-size: 30px;
-  color: white;
+  color: var(--vt-c-black);
   position: absolute;
-  bottom: 0px;
-}
-.item-text {
-  position: absolute;
-  color: black;
-  font-size: 16px;
-  bottom: -140px;
-  z-index: 10;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4; /* number of lines to show */
-  line-clamp: 4;
-  -webkit-box-orient: vertical;
+  bottom: -80px;
 }
 .arrow {
   position: absolute;
