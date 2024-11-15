@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import { gsap } from "gsap";
-import servicesData from "@/assets/data-cards/servicesData.json";
+import {servicesData} from "@/store/store.js";
 
 let services = ref(servicesData);
 
@@ -172,7 +172,7 @@ onUnmounted(() => {});
 
 .carousel-item {
   position: relative;
-  min-width: 60vw;
+  min-width: 80vw;
   flex-shrink: 0;
   height: 300px;
   background-color: #ddd;
@@ -229,6 +229,8 @@ onUnmounted(() => {});
   -webkit-line-clamp: 4; /* number of lines to show */
   line-clamp: 4;
   -webkit-box-orient: vertical;
+  text-align: center;
+  padding: 0px 10px;
 }
 .arrow {
   position: absolute;

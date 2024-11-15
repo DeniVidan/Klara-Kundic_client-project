@@ -1,37 +1,44 @@
 [
-    {
-      "id": 1,
-      "company_name": "work 1",
-      "image_url": "../src/assets/images/work1.jpg"
-    },
-    {
-      "id": 2,
-      "company_name": "work 2",
-      "image_url": "../src/assets/images/work2.jpg"
-    },
-    {
-      "id": 3,
-      "company_name": "work 3",
-      "image_url": "../src/assets/images/work3.jpg"
-    },
-    {
-      "id": 4,
-      "company_name": "work 4",
-      "image_url": "../src/assets/images/work4.jpg"
-    },
-    {
-      "id": 5,
-      "company_name": "work 5",
-      "image_url": "../src/assets/images/work5.jpg"
-    },
-    {
-      "id": 6,
-      "company_name": "work 6",
-      "image_url": "../src/assets/images/work6.jpg"
-    },
-    {
-      "id": 7,
-      "company_name": "work 7",
-      "image_url": "../src/assets/images/work7.jpg"
-    }
-  ]
+  {
+    "id": 1,
+    "company_name": "work 1",
+    "image_url": "../src/assets/images/work1.jpg",
+    "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure neque numquam error?"
+  },
+  {
+    "id": 2,
+    "company_name": "work 2",
+    "image_url": "../src/assets/images/work2.jpg",
+    "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure neque numquam error?"
+  },
+  {
+    "id": 3,
+    "company_name": "work 3",
+    "image_url": "../src/assets/images/work3.jpg",
+    "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure neque numquam error?"
+  },
+  {
+    "id": 4,
+    "company_name": "work 4",
+    "image_url": "../src/assets/images/work4.jpg",
+    "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure neque numquam error?"
+  },
+  {
+    "id": 5,
+    "company_name": "work 5",
+    "image_url": "../src/assets/images/work5.jpg",
+    "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure neque numquam error?"
+  },
+  {
+    "id": 6,
+    "company_name": "work 6",
+    "image_url": "../src/assets/images/work6.jpg",
+    "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure neque numquam error?"
+  },
+  {
+    "id": 7,
+    "company_name": "work 7",
+    "image_url": "../src/assets/images/work7.jpg",
+    "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure neque numquam error?"
+  }
+]

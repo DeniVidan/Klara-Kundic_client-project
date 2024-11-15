@@ -5,7 +5,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
 import TextLoop from "@/components/braker/TextLoop.vue";
-import fakedata from "@/assets/data-cards/fakedata.json";
+import {fakedata} from "@/store/store.js";
+
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
@@ -17,7 +18,7 @@ const route = useRoute();
 
 let works = ref(fakedata);
 
-console.log("works: ", works);
+//console.log("works: ", works);
 
 const carousel = ref(null);
 const currentIndex = ref(0);

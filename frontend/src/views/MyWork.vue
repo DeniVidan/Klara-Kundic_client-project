@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
-import fakedata from "@/assets/data-cards/fakedata.json";
+import {fakedata} from "@/store/store.js";
 import { gsap } from "gsap";
 
 let works = ref(fakedata);
@@ -86,15 +86,16 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  carousel.value.removeEventListener("mousedown", startDrag);
-  carousel.value.removeEventListener("touchstart", startDrag);
+  //with this cant route back
+/*   carousel.value.removeEventListener("mousedown", startDrag);
+  carousel.value.removeEventListener("touchstart", startDrag); */
 });
 </script>
 
 
 <template>
   <div class="wrapper">
-    <div class="title">what can i do...</div>
+    <div class="title">my work</div>
     <div class="progress-wrapper">
       <div class="progress">{{ progress + "/" + works.length }}</div>
       <div class="progress-container">
@@ -109,8 +110,13 @@ onUnmounted(() => {
         ❮
       </button>
       <div class="carousel" ref="carousel">
+        
         <div v-for="(work, index) in works" :key="index" :class="['carousel-item', { active: index === currentIndex }]">
-          <img :src="work.image_url" alt="" />
+          <RouterLink :to="{ name: 'workdetail', params: { id: work.id } }">
+            <img :src="work.image_url" alt="" />
+          </RouterLink>
+          
+
         </div>
       </div>
       <button
@@ -136,6 +142,13 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 50px;
+}
+a {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  text-decoration: none;
+  box-shadow: none;
 }
 .active .item-title {
   color: red;

@@ -28,16 +28,12 @@ onMounted(() => {
     zIndex: 1000,
   });
   let sections = gsap.utils.toArray(".anim");
-  
 
   gsap.from(sections, {
     opacity: 0,
     y: 100,
     stagger: 0.15,
   });
-
-
-
 });
 </script>
 
@@ -45,7 +41,12 @@ onMounted(() => {
   <div class="wrapper">
     <div class="brand-name anim">Klara Kundic</div>
     <div class="text anim">Live wedding sketching, gifts, custom orders</div>
-    <div class="button anim">Let's talk</div>
+    <div
+      class="anim"
+      style="padding: 10px 50px; border: 2px solid var(--vt-c-white-soft)"
+    >
+      <a href="#proba" class="button">Let's talk</a>
+    </div>
   </div>
 </template>
 
@@ -76,8 +77,8 @@ onMounted(() => {
   text-align: center;
 }
 .button {
-  padding: 10px 50px;
-  border: 2px solid var(--vt-c-white-soft);
+  text-decoration: none;
+  color: white;
 }
 
 @media (min-width: 1024px) {
