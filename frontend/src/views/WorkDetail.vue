@@ -137,11 +137,11 @@ onUnmounted(() => {});
     <div class="text-content-wrapper">
       <div class="main-content-wrapper">
         <div class="item-title">
-        {{ work.company_name }}
-      </div>
-      <div class="content">
-        {{ work.content }}
-      </div>
+          {{ work.company_name }}
+        </div>
+        <div class="content">
+          {{ work.content }}
+        </div>
       </div>
 
       <div class="about-work">
@@ -153,9 +153,9 @@ onUnmounted(() => {});
           nemo amet ullam!
         </div>
       </div>
-      <CallToAction style="margin-top: 50px;" />
-      <FooterSection style="margin-top: 100px;" />
+      <CallToAction style="margin-top: 50px" />
     </div>
+    <FooterSection style="margin-top: 100px" />
   </div>
 </template>
 
@@ -257,5 +257,28 @@ onUnmounted(() => {});
 .arrow.disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+@media (min-width: 1024px) {
+  .carousel-item {
+    height: 80vh;
+    background-color: rgb(29, 29, 29);
+  }
+  .carousel-item img {
+    object-fit: contain;
+  }
+  .arrow {
+    color: white;
+  }
+
+  .text-content-wrapper {
+    width: 80%;
+    gap: 100px
+  }
+  .item-title {
+    font-size: 90px;
+  }
+  .title-2 {
+    font-size: 60px;
+  }
 }
 </style>

@@ -15,7 +15,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper-footer">
     <div class="title">Klara Kundich</div>
     <div class="content">
         <div class="item">
@@ -37,7 +37,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.wrapper {
+.wrapper-footer {
   color: var(--vt-c-white-soft);
   background-color: var(--beige-detail-color);
   height: 100vh;

@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import { gsap } from "gsap";
-import {servicesData} from "@/store/store.js";
+import { servicesData } from "@/store/store.js";
 
 let services = ref(servicesData);
 
@@ -80,20 +80,15 @@ onMounted(() => {
   carousel.value.addEventListener("mousedown", startDrag);
   carousel.value.addEventListener("touchstart", startDrag);
 
-
-
   gsap.from(".title-in-anim", {
-      scrollTrigger: {
-        trigger: ".title-in-anim",
-        //markers: true,
-        start: "center bottom",
-        toggleActions: "play play pause reverse",
-      },
-      opacity: 0,
-    });
-
-
-
+    scrollTrigger: {
+      trigger: ".title-in-anim",
+      //markers: true,
+      start: "center bottom",
+      toggleActions: "play play pause reverse",
+    },
+    opacity: 0,
+  });
 });
 
 onUnmounted(() => {});
@@ -123,6 +118,7 @@ onUnmounted(() => {});
           <div class="item-text">{{ service.text }}</div>
         </div>
       </div>
+
       <!-- 
       <button
         :class="[
@@ -134,6 +130,22 @@ onUnmounted(() => {});
       >
         ❯
       </button> -->
+    </div>
+    <div class="desktop-items">
+      <div class="items-wrapper">
+        <div
+          class="item-desktop"
+          v-for="(service, index) in services"
+          :key="index"
+        >
+          <div class="layer"></div>
+          <img :src="service.image" alt="" />
+          <div class="item-title">
+            {{ service.name }}
+          </div>
+          <div class="item-text">{{ service.text }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -150,6 +162,9 @@ onUnmounted(() => {});
   flex-direction: column;
   padding-top: 50px;
   gap: 50px;
+}
+.desktop-items {
+  display: none;
 }
 .title {
   text-align: center;
@@ -259,5 +274,39 @@ onUnmounted(() => {});
 .arrow.disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+@media (min-width: 1024px) {
+  .desktop-items {
+    width: 100vw;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+  }
+  .item-desktop {
+    position: relative;
+    width: 400px;
+    border-radius: 10px;
+  }
+  .items-wrapper {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+  .desktop-items img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+  .carousel-container {
+    display: none;
+  }
+  .item-title {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>

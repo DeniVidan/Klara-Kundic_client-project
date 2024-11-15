@@ -67,5 +67,12 @@ onMounted(() => {
   .greetings h3 {
     text-align: left;
   }
+  .text {
+    width: 60%;
+    margin: auto;
+  }
+  .title {
+    font-size: 60px;
+  }
 }
 </style>

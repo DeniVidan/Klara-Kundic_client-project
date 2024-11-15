@@ -16,7 +16,7 @@ onMounted(() => {
         trigger: quote,
         //markers: true,
         start: "center bottom",
-        toggleActions: "play play pause reverse",
+        /* toggleActions: "play play pause reverse", */
       },
       opacity: 0,
       y: 100,
@@ -149,5 +149,38 @@ strong {
   right: -100px;
 }
 @media (min-width: 1024px) {
+  .title {
+    font-size: 150px;
+    line-height: 0.6;
+    width: 50%;
+  }
+  .shape {
+    display: none;
+  }
+  .first-part {
+    padding-top: 50px;
+    flex-direction: row;
+  }
+  .about-image {
+  width: 50%;
+}
+.second-part {
+  width: 50%;
+  transform: translateY(-400px);
+}
+.second-part p {
+  margin: 0px 150px;
+  font-size: 1.8rem;
+}
+.quotation-mark-1 {
+  position: absolute;
+  top: 100px;
+}
+.quotation-mark-2 {
+  bottom: 120px;
+}
+.wrapper {
+  height: 60vh;
+}
 }
 </style>

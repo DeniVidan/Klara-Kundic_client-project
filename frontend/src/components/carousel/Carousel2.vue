@@ -147,6 +147,21 @@ onUnmounted(() => {});
         ❯
       </button>
     </div>
+    <div class="desktop-items">
+      <div class="items-wrapper">
+        <div
+          class="item-desktop"
+          v-for="(work, index) in works"
+          :key="index"
+        >
+          <div class="layer"></div>
+          <img :src="work.image_url" alt="" />
+          <div class="item-title">
+            {{ work.company_name }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -161,6 +176,10 @@ onUnmounted(() => {});
   flex-direction: column;
     padding-top: 50px;
   gap: 50px;
+}
+.desktop-items {
+  display: none;
+  padding-bottom: 100px
 }
 .title {
   text-align: center;
@@ -214,6 +233,21 @@ onUnmounted(() => {});
   position: absolute;
   bottom: -80px;
 }
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.7567401960784313) 8%,
+    rgba(0, 0, 0, 0) 49%
+  );
+  width: 100%;
+  z-index: 1;
+  height: 100%;
+}
 .arrow {
   position: absolute;
   top: 50%;
@@ -241,5 +275,53 @@ onUnmounted(() => {});
 .arrow.disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+@media (min-width: 1024px) {
+  .desktop-items {
+    width: 100vw;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+  }
+  .item-desktop {
+    position: relative;
+    width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor:pointer;
+  }
+  .items-wrapper {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  .desktop-items img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+  .carousel-container {
+    display: none;
+  }
+  .item-title {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    bottom: 0px;
+    color: white;
+  }
+  .item-desktop img {
+    transition: 200ms all ease-out;
+  }
+  .item-desktop:hover img {
+    transform: scale(1.2);
+    
+    
+    /* transition: 200ms all ease-out; */
+  }
 }
 </style>

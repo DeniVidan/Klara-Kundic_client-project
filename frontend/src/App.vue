@@ -26,7 +26,9 @@ onMounted(() => {});
 <style scoped>
 .wrapper {
   display: flex;
+  width: 100vw !important;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 @media (min-width: 1024px) {

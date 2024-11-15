@@ -95,6 +95,9 @@ onUnmounted(() => {
 
 <template>
   <div class="wrapper">
+    <div class="bg-image">
+      <img src="@/assets/images/bg-logo.png" alt="" />
+    </div>
     <div class="title">my work</div>
     <div class="progress-wrapper">
       <div class="progress">{{ progress + "/" + works.length }}</div>
@@ -142,6 +145,18 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 50px;
+}
+.bg-image {
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  width: 100vw;
+}
+.bg-image img {
+  width: 100%;
+  position: absolute;
+
 }
 a {
   width: 100%;
@@ -271,5 +286,20 @@ a {
 }
 .item-title {
   transition: opacity 0.2s ease;
+  top: 0;
+  font-size: 45px;
+  font-family: sectionTitleFont;
+}
+@media (min-width: 1024px) {
+  .carousel-item {
+    height: 500px;
+    min-width: 50vw;
+  }
+  .item-title {
+    font-size: 90px;
+  }
+  .arrow {
+    font-size: 60px;
+  }
 }
 </style>

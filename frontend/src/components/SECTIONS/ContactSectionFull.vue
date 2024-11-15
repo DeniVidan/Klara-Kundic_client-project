@@ -16,7 +16,7 @@ onMounted(() => {
 
 <template>
   <div class="wrapper">
-    <div class="text-divider">Get in contact with me by filling out the form or use another way to contact me below</div>
+    <!-- <div class="text-divider">Get in contact with me by filling out the form or use another way to contact me below</div> -->
     
     <div class="form-wraper">
       <div class="big-text">let's talk!</div>
@@ -31,7 +31,7 @@ onMounted(() => {
         <!--  -->
       </div>
     </div>
-    <div class="text-divider">Make it memorable.</div>
+    <!-- <div class="text-divider">Make it memorable.</div> -->
     <div class="additional-contact">
       <div class="title">additional contact</div>
       <div class="contacts">
@@ -48,7 +48,6 @@ onMounted(() => {
 
 .wrapper {
   color: var(--vt-c-white-soft);
-  height: 100vh;
   width: 100vw;
   align-items: center;
   display: flex;
@@ -56,6 +55,7 @@ onMounted(() => {
   gap: 50px;
   justify-content: start;
   margin-top: 50px;
+  margin-bottom: 100px;
 }
 .text-divider {
   text-align: center;
@@ -210,11 +210,12 @@ textarea:focus::placeholder {
     margin-top: 25px;
 }
 
-.hero-text {
-    font-size: 45px;
+.hero-text h1 {
+    font-size: 100px;
     line-height: 1;
     text-align: center;
     font-family: sectionContactFont;
+
 }
 
 

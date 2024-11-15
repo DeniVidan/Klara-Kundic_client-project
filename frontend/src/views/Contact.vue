@@ -7,7 +7,6 @@ import { Draggable } from "gsap/Draggable";
 import ContactSectionFull from "@/components/SECTIONS/ContactSectionFull.vue";
 import FooterSection from "@/components/SECTIONS/FooterSection.vue";
 
-
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
 
@@ -16,30 +15,30 @@ defineProps({});
 const router = useRouter();
 const route = useRoute();
 
-
-
-onMounted(() => {
-
-});
+onMounted(() => {});
 
 onUnmounted(() => {});
 </script>
 <template>
   <div class="wrapper">
+    <div class="main" style="display: flex; flex-direction: column;">
     <img src="@/assets/images/background-gif.gif" class="bg-img" alt="" />
     <div class="title">contact me</div>
-    <ContactSectionFull />
-    <FooterSection style="margin-top: 450px;" />
+    
+      <ContactSectionFull />
+
+    </div>
+    <FooterSection style="margin-top: 0vh; position: relative" />
+     
   </div>
 </template>
 
 <style scoped>
-
 .wrapper {
   display: flex;
-width: 100vw;
-/* background-color: var(--color-background); */
-
+  flex-direction: column;
+  width: 100vw;
+  /* background-color: var(--color-background); */
 }
 .bg-img {
   position: fixed;

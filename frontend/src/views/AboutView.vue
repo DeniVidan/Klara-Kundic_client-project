@@ -92,10 +92,11 @@ document.addEventListener("click", () => {
     );
   });
 
+
   gsap.from(".hero-text", {
     opacity: 0,
     y: 20,
-    duration: 0.5,
+    duration: 1,
     ease: "power3.out",
   });
 
@@ -121,8 +122,8 @@ onUnmounted(() => {});
       <div class="hero-text">
         Hi,<br />
         I’m Klara Kundich.
-        <span><img src="@/assets/images/klara-image.jpg" alt="" /></span>
-        an independent live wedding sketcher located in croatia.
+        <span><img src="@/assets/images/klara-image.jpg" alt="" /></span><br>
+        live wedding sketcher <br> located in croatia.
       </div>
 
       <div class="images-section">
@@ -143,7 +144,7 @@ onUnmounted(() => {});
     <div class="text-divider">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium?
     </div>
-
+<div class="additional-sections-wrapper">
     <div class="additional-section">
       <div class="title show-anim">where?</div>
       <div class="content show-anim">
@@ -160,6 +161,8 @@ onUnmounted(() => {});
         nemo amet ullam!
       </div>
     </div>
+</div>
+
     <FooterSection class="footer" style="position: relative" />
   </div>
 </template>
@@ -177,7 +180,6 @@ onUnmounted(() => {});
   padding-left: 30px;
 }
 .first-section {
-  height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -196,7 +198,7 @@ span {
 span img {
   object-fit: cover;
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 40px;
   height: 40px;
@@ -220,8 +222,8 @@ span img {
 }
 .images-section {
   overflow-x: hidden;
-  height: 160px;
   width: 100vw;
+  height: 30vh;
 }
 .images-card {
   overflow-x: hidden;
@@ -247,9 +249,13 @@ span img {
 }
 .text-divider {
   text-align: center;
-  height: 20vh;
+/*   height: 20vh; */
   display: flex;
   align-items: center;
+}
+.additional-sections-wrapper {
+  display: flex;
+  flex-direction: column;
 }
 .additional-section {
   display: flex;
@@ -273,5 +279,38 @@ span img {
   font-size: 40px;
   color: var(--vt-c-black);
   margin-left: 45px;
+}
+@media (min-width: 1024px) {
+  .hero-text {
+    font-size: 100px;
+  }
+  span img {
+    width: 100px;
+    height: 100px;
+  }
+  .image {
+  width: 220px;
+  height: 300px;
+}
+.image img {
+  width: 220px;
+  height: 300px;
+}
+.text-divider {
+  justify-content: center;
+  margin-top: 150px;
+}
+.title {
+  font-size: 90px;
+}
+.title-2 {
+  font-size: 60px;
+}
+.additional-sections-wrapper {
+  flex-direction: row;
+}
+.additional-section {
+  width: 50%;
+}
 }
 </style>
