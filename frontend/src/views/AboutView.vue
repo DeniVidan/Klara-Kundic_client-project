@@ -252,6 +252,7 @@ span img {
 /*   height: 20vh; */
   display: flex;
   align-items: center;
+  color: black
 }
 .additional-sections-wrapper {
   display: flex;
@@ -272,6 +273,7 @@ span img {
   margin-left: 45px;
 }
 .content {
+  color: black;
   margin: 0px 45px;
 }
 .title-2 {
@@ -308,6 +310,8 @@ span img {
 }
 .additional-sections-wrapper {
   flex-direction: row;
+  width: 80%;
+  margin: auto;
 }
 .additional-section {
   width: 50%;

@@ -46,7 +46,7 @@ onUnmounted(() => {});
       :msg="landingText[0].text"
       style="position: relative; z-index: 1"
     />
-    <<!-- WorkSection style="position: relative; z-index: 1" /> -->
+    <!-- WorkSection style="position: relative; z-index: 1" /> -->
     <Carousel2 style="position: relative; z-index: 1"/>
     <ContactSection id="proba" style="position: relative; z-index: 1" />
     <FooterSection class="footer" style="position: relative" />
