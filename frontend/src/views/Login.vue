@@ -3,6 +3,7 @@ import { onMounted, onUnmounted, ref, render } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { getAuth, signInWithEmailAndPassword , onAuthStateChanged } from "firebase/auth";
 import { useCurrentUser, useFirebaseAuth } from 'vuefire'
+import { userData } from "@/store/store";
 
 defineProps({
   email: {
@@ -26,12 +27,13 @@ async function login(email, password) {
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
+    //localStorage.setItem("user", JSON.stringify(userCredential.user))
     router.go("/")
     // ...
   })
   .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
+    let errorCode = error.code;
+    let errorMessage = error.message;
     console.error(error)
   });
    
@@ -39,7 +41,7 @@ async function login(email, password) {
 
 
 onMounted(() => {
- 
+
 
 });
 
@@ -47,8 +49,9 @@ onUnmounted(() => {});
 </script>
 <template>
   <div class="wrapper">
-    LOGIN
+    
     <div class="login-wrapper">
+      LOGIN
       <div class="login-card">
         <input v-model="email" type="email" />
         <input v-model="password" type="password" />
@@ -59,64 +62,17 @@ onUnmounted(() => {});
 </template>
 
 <style scoped>
+.wrapper {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+.login-wrapper {
+  width: 300px;
+  margin: 0 auto;
+}
 .login-card {
     display: flex;
     flex-direction: column;
-}
-@font-face {
-  font-family: Glamora;
-  src: url(../assets/fonts/GLAMORA.otf) format("truetype");
-}
-@font-face {
-  font-family: Sinera;
-  src: url(../assets/fonts/Sinera.ttf) format("truetype");
-}
-@font-face {
-  font-family: Pavon;
-  src: url(../assets/fonts/Pavon.otf) format("truetype");
-}
-@font-face {
-  font-family: ExcaliburNouveau;
-  src: url(../assets/fonts/Excalibur_Nouveau.ttf) format("truetype");
-}
-@font-face {
-  font-family: RCDemo;
-  src: url(../assets/fonts/R&C-Demo.otf) format("truetype");
-}
-@font-face {
-  font-family: LazySketch;
-  src: url(../assets/fonts/Lazy_Sketch.ttf) format("truetype");
-}
-@font-face {
-  font-family: MonasDemo;
-  src: url(../assets/fonts/Monas_Demo.ttf) format("truetype");
-}
-@font-face {
-  font-family: moniqua;
-  src: url(../assets/fonts/Variable-TT/font1.ttf) format("truetype");
-}
-@font-face {
-  font-family: moniqua2;
-  src: url(../assets/fonts/OpenType/Moniqa-ExtraBoldDisplay.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: moniquaItalic;
-  src: url(../assets/fonts/OpenType/Moniqa-NarrowItalicDisplay.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: buttonFont;
-  src: url(../assets/fonts/OpenType/Moniqa-BlackHeading.ttf) format("truetype");
-}
-@font-face {
-  font-family: regularMoniqua;
-  src: url(../assets/fonts/OpenType/Moniqa-MediumItalicParagraph.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: moniquaCardTitle;
-  src: url(../assets/fonts/OpenType/Moniqa-BlackCondParagraph.ttf)
-    format("truetype");
 }
 </style>

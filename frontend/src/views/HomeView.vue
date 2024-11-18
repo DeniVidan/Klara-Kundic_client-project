@@ -16,6 +16,7 @@ import ContactSection from "@/components/SECTIONS/ContactSection.vue";
 import FooterSection from "@/components/SECTIONS/FooterSection.vue";
 import Carousel1 from "@/components/carousel/Carousel1.vue";
 import Carousel2 from "@/components/carousel/Carousel2.vue";
+import { userData } from "@/store/store";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
@@ -29,6 +30,7 @@ const auth = useFirebaseAuth();
 /* console.log(auth.currentUser) */
 
 onMounted(() => {
+
 
 });
 
@@ -61,62 +63,5 @@ onUnmounted(() => {});
   left: 0;
   top: 0;
   filter: brightness(0.4);
-}
-
-@font-face {
-  font-family: Glamora;
-  src: url(../assets/fonts/GLAMORA.otf) format("truetype");
-}
-@font-face {
-  font-family: Sinera;
-  src: url(../assets/fonts/Sinera.ttf) format("truetype");
-}
-@font-face {
-  font-family: Pavon;
-  src: url(../assets/fonts/Pavon.otf) format("truetype");
-}
-@font-face {
-  font-family: ExcaliburNouveau;
-  src: url(../assets/fonts/Excalibur_Nouveau.ttf) format("truetype");
-}
-@font-face {
-  font-family: RCDemo;
-  src: url(../assets/fonts/R&C-Demo.otf) format("truetype");
-}
-@font-face {
-  font-family: LazySketch;
-  src: url(../assets/fonts/Lazy_Sketch.ttf) format("truetype");
-}
-@font-face {
-  font-family: MonasDemo;
-  src: url(../assets/fonts/Monas_Demo.ttf) format("truetype");
-}
-@font-face {
-  font-family: moniqua;
-  src: url(../assets/fonts/Variable-TT/font1.ttf) format("truetype");
-}
-@font-face {
-  font-family: moniqua2;
-  src: url(../assets/fonts/OpenType/Moniqa-ExtraBoldDisplay.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: moniquaItalic;
-  src: url(../assets/fonts/OpenType/Moniqa-NarrowItalicDisplay.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: buttonFont;
-  src: url(../assets/fonts/OpenType/Moniqa-BlackHeading.ttf) format("truetype");
-}
-@font-face {
-  font-family: regularMoniqua;
-  src: url(../assets/fonts/OpenType/Moniqa-MediumItalicParagraph.ttf)
-    format("truetype");
-}
-@font-face {
-  font-family: moniquaCardTitle;
-  src: url(../assets/fonts/OpenType/Moniqa-BlackCondParagraph.ttf)
-    format("truetype");
 }
 </style>

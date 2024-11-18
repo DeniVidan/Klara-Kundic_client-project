@@ -2,6 +2,8 @@
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import {fakedata} from "@/store/store.js";
 import { gsap } from "gsap";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase/init";
 
 let works = ref(fakedata);
 const carousel = ref(null);
@@ -13,6 +15,22 @@ let startX;
 
 const progress = computed(() => currentIndex.value + 1);
 const progressBarWidth = computed(() => (progress.value / works.value.length) * 100);
+
+async function fetchWorks() {
+  try {
+    const worksCollection = collection(db, "works");
+    const worksSnapshot = await getDocs(worksCollection);
+    works.value = worksSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id, // Use the Firestore document ID as a unique identifier
+    }));
+    console.log("works: ", works.value)
+  } catch (error) {
+    console.error("Error fetching works:", error);
+  }
+}
+
+
 
 function updateCarousel() {
   const maxIndex = works.value.length - 1;
@@ -28,7 +46,7 @@ function updateCarousel() {
 const textOverlay = ref(null);
 watch(currentIndex, () => {
   gsap.to(textOverlay.value, { opacity: 0, duration: 0.3, onComplete: () => {
-    textOverlay.value.innerText = works.value[currentIndex.value].company_name;
+    textOverlay.value.innerText = works.value[currentIndex.value].title;
     gsap.to(textOverlay.value, { opacity: 1, duration: 0.2 });
   } });
 });
@@ -70,6 +88,7 @@ function endDrag(e) {
 }
 
 onMounted(() => {
+  fetchWorks();
   // Initial setup for item and container width
   itemWidth.value = carousel.value.querySelector(".carousel-item").offsetWidth + 20;
   containerWidth.value = document.querySelector(".carousel-container").offsetWidth;
@@ -77,7 +96,7 @@ onMounted(() => {
   updateCarousel();
 
   // Initial fade-in for the first title
-  textOverlay.value.innerText = works.value[currentIndex.value].company_name;
+  textOverlay.value.innerText = works.value[currentIndex.value].title;
   gsap.fromTo(textOverlay.value, { opacity: 0 }, { opacity: 1, duration: 0.3 });
 
   // Event listeners for dragging functionality
@@ -116,7 +135,7 @@ onUnmounted(() => {
         
         <div v-for="(work, index) in works" :key="index" :class="['carousel-item', { active: index === currentIndex }]">
           <RouterLink :to="{ name: 'workdetail', params: { id: work.id } }">
-            <img :src="work.image_url" alt="" />
+            <img :src="work.images" alt="" />
           </RouterLink>
           
 
@@ -132,7 +151,7 @@ onUnmounted(() => {
 
     <!-- Fixed Text Overlay -->
     <div class="centered-text">
-      <div ref="textOverlay" class="item-title">{{ works[currentIndex]?.company_name }}</div>
+      <div ref="textOverlay" class="item-title">{{ works[currentIndex]?.title }}</div>
     </div>
   </div>
 </template>
@@ -179,7 +198,7 @@ a {
   display: flex;
   gap: 10px;
   justify-content: end;
-  margin-right: 10px;
+  margin-right: 30px;
 }
 .progress-container {
   width: 70px;
@@ -291,6 +310,9 @@ a {
   font-family: sectionTitleFont;
 }
 @media (min-width: 1024px) {
+  .bg-image img {
+    object-fit: scale-down;
+}
   .carousel-item {
     height: 500px;
     min-width: 50vw;

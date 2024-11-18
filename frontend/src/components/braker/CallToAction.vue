@@ -19,16 +19,17 @@ onMounted(() => {
       //markers: true,
       toggleActions: "play play pause reverse",
     },
-    scale: 1.2,
+    y: 50,
     opacity: 0,
+    stagger: 0.2
   });
 });
 </script>
 
 <template>
   <div class="wrap">
-    <div class="title">create history</div>
-    <div class="text">
+    <div class="title braker-text-anim">create history</div>
+    <div class="text braker-text-anim">
       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil sequi qui
       sint aliquid culpa facere mollitia accusamus iusto beatae in?
     </div>

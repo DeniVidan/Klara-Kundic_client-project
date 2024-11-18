@@ -88,5 +88,8 @@ ul {
 }
 
 @media (min-width: 1024px) {
+  .items-wrapper {
+    width: 50%;
+  }
 }
 </style>

@@ -8,6 +8,9 @@ import { Draggable } from "gsap/Draggable";
 import { fakedata } from "@/store/store.js";
 import CallToAction from "@/components/braker/CallToAction.vue";
 import FooterSection from "@/components/SECTIONS/FooterSection.vue";
+import { getCurrentUser } from "@/firebase/init";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/init";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
@@ -15,48 +18,64 @@ gsap.registerPlugin(Draggable);
 const props = defineProps({
   id: String,
 });
-const router = useRouter();
+
 const route = useRoute();
-const auth = useFirebaseAuth();
-
-let works = ref(fakedata);
-let work = ref();
-work.value = works.value.find((element) => element.id == props.id);
-
-//console.log("works: ", works);
+const work = ref(null);
+const images = ref([]);
 
 const carousel = ref(null);
 const currentIndex = ref(0);
-
 const itemWidth = ref(0);
 const containerWidth = ref(0);
-let startX;
+const startX = ref(0);
+let user = ref(null)
 
-// Functions to update carousel position and apply fade effect
+// Fetch work data by ID
+async function fetchWorkById(id) {
+  try {
+    const docRef = doc(collection(db, "works"), id);
+    const workSnapshot = await getDoc(docRef);
+    if (workSnapshot.exists()) {
+      work.value = { id: workSnapshot.id, ...workSnapshot.data() };
+      images.value = work.value.images || []; // Default to an empty array if no images
+    } else {
+      console.error("No such work found!");
+    }
+  } catch (error) {
+    console.error("Error fetching work:", error);
+  }
+}
+
+// Update the carousel position
 function updateCarousel() {
-  const maxIndex = works.value.length - 1;
-  if (currentIndex.value <= 0) {
+  if (!images.value.length) return;
+
+  const maxIndex = images.value.length - 1;
+  if (currentIndex.value < 0) {
     currentIndex.value = 0;
-  } else if (currentIndex.value >= maxIndex) {
+  } else if (currentIndex.value > maxIndex) {
     currentIndex.value = maxIndex;
   }
 
-  // Calculate the translateX to center the current item
   const translateX =
     -currentIndex.value * itemWidth.value +
     (containerWidth.value - itemWidth.value) / 2;
-  carousel.value.style.transform = `translateX(${translateX}px)`;
+
+  if (carousel.value) {
+    carousel.value.style.transform = `translateX(${translateX}px)`;
+  }
 }
 
 // Move carousel left or right
 function moveCarousel(direction) {
+  if (!images.value.length) return;
   currentIndex.value += direction;
   updateCarousel();
 }
 
 // Drag functionality
 function startDrag(e) {
-  startX = e.touches ? e.touches[0].clientX : e.clientX;
+  startX.value = e.touches ? e.touches[0].clientX : e.clientX;
   document.addEventListener("mousemove", drag);
   document.addEventListener("mouseup", endDrag);
   document.addEventListener("touchmove", drag);
@@ -65,44 +84,52 @@ function startDrag(e) {
 
 function drag(e) {
   const x = e.touches ? e.touches[0].clientX : e.clientX;
-  const delta = x - startX;
+  const delta = x - startX.value;
   const translateX =
     -currentIndex.value * itemWidth.value +
     (containerWidth.value - itemWidth.value) / 2 +
     delta;
-  carousel.value.style.transform = `translateX(${translateX}px)`;
+
+  if (carousel.value) {
+    carousel.value.style.transform = `translateX(${translateX}px)`;
+  }
 }
 
 function endDrag(e) {
   const x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-  const delta = x - startX;
+  const delta = x - startX.value;
+
   if (Math.abs(delta) > itemWidth.value / 4) {
     currentIndex.value -= Math.sign(delta);
   }
   updateCarousel();
+
   document.removeEventListener("mousemove", drag);
   document.removeEventListener("mouseup", endDrag);
   document.removeEventListener("touchmove", drag);
   document.removeEventListener("touchend", endDrag);
 }
-onMounted(() => {
-  itemWidth.value = carousel.value.querySelector(".carousel-item").offsetWidth; // include gap here
-  containerWidth.value = document.querySelector(
-    ".carousel-container"
-  ).offsetWidth;
 
-  // Initial update
-  updateCarousel();
+onMounted(async () => {
+  user.value = await getCurrentUser()
+  console.log("user:", user.value)
+  await fetchWorkById(props.id);
 
-  // Add drag event listeners
-  carousel.value.addEventListener("mousedown", startDrag);
-  carousel.value.addEventListener("touchstart", startDrag);
+  if (carousel.value && images.value.length) {
+    const firstItem = carousel.value.querySelector(".carousel-item");
+    if (firstItem) {
+      itemWidth.value = firstItem.offsetWidth;
+    }
+    containerWidth.value = document.querySelector(".carousel-container").offsetWidth;
 
-  console.log(work.value);
+    updateCarousel();
+
+    carousel.value.addEventListener("mousedown", startDrag);
+    carousel.value.addEventListener("touchstart", startDrag);
+  }
 });
-
-onUnmounted(() => {});
 </script>
+
 <template>
   <div class="wrapper-work">
     <div class="carousel-container">
@@ -115,37 +142,33 @@ onUnmounted(() => {});
 
       <div class="carousel" ref="carousel">
         <div
-          v-for="(work, index) in works"
+          v-for="(image, index) in images"
           :key="index"
           :class="['carousel-item', { active: index === currentIndex }]"
         >
-          <img :src="work.image_url" alt="" />
+          <img :src="image" alt="" />
         </div>
       </div>
 
       <button
-        :class="[
-          'arrow',
-          'arrow-right',
-          { disabled: currentIndex === works.length - 1 },
-        ]"
+        :class="[ 'arrow', 'arrow-right', { disabled: currentIndex === images.length - 1 } ]"
         @click="moveCarousel(1)"
       >
         ❯
       </button>
     </div>
-    <div class="text-content-wrapper">
+    <div v-if="user" class="edit-buttons">
+      <img src="@/assets/images/edit.png" alt="">
+      <img src="@/assets/images/delete.png" alt="">
+    </div>
+    <div v-if="work?.title" class="text-content-wrapper">
       <div class="main-content-wrapper">
-        <div class="item-title">
-          {{ work.company_name }}
-        </div>
-        <div class="content">
-          {{ work.content }}
-        </div>
+        <div class="item-title">{{ work.title }}</div>
+        <div class="content">{{ work.description }}</div>
       </div>
 
       <div class="about-work">
-        <div class="title-2">about this work</div>
+        <div class="title-2">About this work</div>
         <div class="content">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
           excepturi enim, veniam beatae quisquam consequatur porro reprehenderit
@@ -155,9 +178,11 @@ onUnmounted(() => {});
       </div>
       <CallToAction style="margin-top: 50px" />
     </div>
+
     <FooterSection style="margin-top: 100px" />
   </div>
 </template>
+
 
 <style scoped>
 .wrapper-work {
@@ -170,7 +195,17 @@ onUnmounted(() => {});
   flex-direction: column;
   gap: 50px;
 }
-
+.edit-buttons {
+  color: var(--vt-c-white-soft);
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-left: 50px;
+}
+.edit-buttons img {
+  padding: 10px 15px;
+  object-fit: contain;
+}
 .carousel-container {
   position: relative;
   width: 100vw;

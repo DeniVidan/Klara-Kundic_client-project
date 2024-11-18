@@ -1,11 +1,12 @@
 <script setup>
-import { onMounted, onUnmounted, ref, render } from "vue";
+import { onMounted, onUnmounted, ref, render, nextTick  } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
-import TextLoop from "@/components/braker/TextLoop.vue";
 import {fakedata} from "@/store/store.js";
+import { db, storage } from "@/firebase/init"; // Import Firebase db and storage
+import { collection, getDocs } from "firebase/firestore"; // Firestore query functions
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,10 +16,20 @@ defineProps({});
 
 const router = useRouter();
 const route = useRoute();
+let works = ref([fakedata]);
 
-let works = ref(fakedata);
+//console.log("works: ", works.value);
 
-//console.log("works: ", works);
+const fetchWorks = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "works")); // Assuming "works" is the collection name
+    works.value = querySnapshot.docs.map(doc => doc.data());
+    console.log("Works fetched from Firestore:", works.value);
+    updateCarousel(); // Update the carousel once works are fetched
+  } catch (error) {
+    console.error("Error fetching works:", error);
+  }
+};
 
 const carousel = ref(null);
 const currentIndex = ref(0);
@@ -80,34 +91,33 @@ function endDrag(e) {
   document.removeEventListener("touchmove", drag);
   document.removeEventListener("touchend", endDrag);
 }
+
 onMounted(() => {
-  itemWidth.value =
-    carousel.value.querySelector(".carousel-item").offsetWidth + 20; // including gap
-  containerWidth.value = document.querySelector(
-    ".carousel-container"
-  ).offsetWidth;
+  fetchWorks(); // Fetch works data on component mount
 
-  // Initial update
-  updateCarousel();
+  // Wait until the next DOM update cycle
+  nextTick(() => {
+    if (carousel.value && carousel.value.querySelector(".carousel-item")) {
+      itemWidth.value =
+        carousel.value.querySelector(".carousel-item").offsetWidth + 20; // Including gap
+      containerWidth.value = document.querySelector(".carousel-container").offsetWidth;
+      updateCarousel();
+    }
+  });
 
-  // Add drag event listeners
   carousel.value.addEventListener("mousedown", startDrag);
   carousel.value.addEventListener("touchstart", startDrag);
 
-
-
   gsap.from(".workSection-item-show-anim", {
-      scrollTrigger: {
-        trigger: ".workSection-item-show-anim",
-        //markers: true,
-        start: "center bottom",
-        toggleActions: "play play pause reverse",
-      },
-      opacity: 0,
-    });
-
-
+    scrollTrigger: {
+      trigger: ".workSection-item-show-anim",
+      start: "center bottom",
+      toggleActions: "play play pause reverse",
+    },
+    opacity: 0,
+  });
 });
+
 
 onUnmounted(() => {});
 </script>
@@ -128,10 +138,9 @@ onUnmounted(() => {});
           :key="index"
           :class="['carousel-item', { active: index === currentIndex }]"
         >
-          <img :src="work.image_url" alt="" />
-
+          <img :src="work.images" alt="" />
           <div class="item-title">
-            {{ work.company_name }}
+            {{ work.title }}
           </div>
         </div>
       </div>
@@ -278,7 +287,7 @@ onUnmounted(() => {});
 }
 @media (min-width: 1024px) {
   .desktop-items {
-    width: 100vw;
+    width: 90vw;
     display: flex;
     position: relative;
     flex-direction: row;

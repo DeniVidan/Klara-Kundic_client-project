@@ -283,6 +283,9 @@ span img {
   margin-left: 45px;
 }
 @media (min-width: 1024px) {
+  .bg-image img {
+    object-fit: scale-down;
+}
   .hero-text {
     font-size: 100px;
   }

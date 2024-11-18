@@ -47,5 +47,9 @@ onMounted(()=> {
   .greetings h3 {
     text-align: left;
   }
+  .text {
+    width: 40%;
+    margin: auto;
+  }
 }
 </style>

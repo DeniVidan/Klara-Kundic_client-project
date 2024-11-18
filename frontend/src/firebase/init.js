@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore, collection } from 'firebase/firestore'
 import { onAuthStateChanged } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 
 export const firebaseApp = initializeApp({
@@ -15,6 +16,10 @@ export const firebaseApp = initializeApp({
 })
 
 export const auth = getAuth(firebaseApp)
+
+export const db = getFirestore(firebaseApp)
+
+export const storage = getStorage(firebaseApp)
 
 export function getCurrentUser() {
   return new Promise((resolve, reject) => {

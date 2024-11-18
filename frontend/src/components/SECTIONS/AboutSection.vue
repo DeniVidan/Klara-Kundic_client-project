@@ -1,22 +1,45 @@
 <script setup>
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/init"; // Initialize Firebase
 
 gsap.registerPlugin(ScrollTrigger);
 
-defineProps({});
+// Reactive variable to hold the image URL
+let profileImageUrl = ref("");
 
+// Assume you have a user ID (it could be from Firebase Authentication or any unique identifier)
+const userId = "user123"; // Example user ID
+
+// Fetch the profile image URL from Firestore
+async function fetchProfileImage() {
+  try {
+    const profileDocRef = doc(db, "profile", userId); // Reference to the profile document
+    const profileDoc = await getDoc(profileDocRef);
+
+    if (profileDoc.exists()) {
+      profileImageUrl.value = profileDoc.data().profilePicture; // Set the image URL
+    } else {
+      console.log("No profile found");
+    }
+  } catch (error) {
+    console.error("Error fetching profile image:", error);
+  }
+}
+
+// GSAP animation setup
 onMounted(() => {
+  fetchProfileImage(); // Fetch profile image on mount
+
   let sections = gsap.utils.toArray(".item-in-anim");
-  let quotation_marks = gsap.utils.toArray(".quotation-mark-1, .quotation-mark-2")
+  let quotation_marks = gsap.utils.toArray(".quotation-mark-1, .quotation-mark-2");
   quotation_marks.forEach(quote => {
     gsap.from(quote, {
       scrollTrigger: {
         trigger: quote,
-        //markers: true,
         start: "center bottom",
-        /* toggleActions: "play play pause reverse", */
       },
       opacity: 0,
       y: 100,
@@ -24,15 +47,10 @@ onMounted(() => {
     });
   });
 
-
-
-
   sections.forEach((section, index) => {
-
     gsap.from(section.childNodes, {
       scrollTrigger: {
         trigger: section,
-        //markers: true,
         start: "center bottom",
         toggleActions: "play play pause reverse",
       },
@@ -50,7 +68,8 @@ onMounted(() => {
     <div class="first-part item-in-anim">
       <div class="title">I'm Klara</div>
       <div class="about-image">
-        <img src="@/assets/images/klara-image.jpg" alt="" />
+        <!-- Dynamically bind the profile image URL to the src attribute -->
+        <img :src="profileImageUrl" alt="Profile Image" v-if="profileImageUrl" />
       </div>
     </div>
 
@@ -126,6 +145,8 @@ strong {
 }
 .about-image img {
   width: 350px;
+  height: 500px;
+  object-fit: cover;
   position: absolute;
 }
 .second-part p {
@@ -148,11 +169,13 @@ strong {
   bottom: 10px;
   right: -100px;
 }
+
 @media (min-width: 1024px) {
   .title {
     font-size: 150px;
     line-height: 0.6;
     width: 50%;
+    text-align: end;
   }
   .shape {
     display: none;
@@ -166,10 +189,11 @@ strong {
 }
 .second-part {
   width: 50%;
-  transform: translateY(-400px);
+  transform: translateY(-500px);
 }
 .second-part p {
-  margin: 0px 150px;
+  margin: auto;
+  width: 80%;
   font-size: 1.8rem;
 }
 .quotation-mark-1 {
@@ -181,6 +205,19 @@ strong {
 }
 .wrapper {
   height: 60vh;
+}
+}
+@media (min-width: 1280px) {
+  .second-part {
+  transform: translateY(-500px)
+            translateX(200px);
+}
+}
+@media (min-width: 1900px) {
+  .second-part {
+    width: 40%;
+  transform: translateY(-500px)
+            translateX(400px);
 }
 }
 </style>

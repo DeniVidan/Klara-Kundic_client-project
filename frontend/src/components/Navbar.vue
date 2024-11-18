@@ -13,11 +13,7 @@ const route = useRoute();
 
 const auth = useFirebaseAuth();
 
-onMounted(() => {
-
-});
-
-
+onMounted(() => {});
 
 function hamburgerClick() {
   const icon = document.querySelector("#hamburgerIcon");
@@ -45,31 +41,14 @@ function hamburgerClick() {
 </script>
 
 <template>
-
-
-  <div style="z-index: 6;">
-      <button v-if="useCurrentUser().value" @click="signOut(auth)">
-        LOGOUT
-      </button>
-    </div>
-  <div
-      style="
-        background-color: var(--beige-detail-color);
-        display: flex;
-        position: fixed;
-        border-radius: 100%;
-        width: 50px;
-        height: 50px;
-        z-index: 4;
-        right: 10px;
-        top: 10px
-      "
-    >
-      <a id="hamburgerIcon" @click="hamburgerClick()" class="navbar-hamburger">
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-
+  <div style="z-index: 6">
+    <button v-if="useCurrentUser().value" @click="signOut(auth)">LOGOUT</button>
+  </div>
+  <div class="hamburger-wrapper">
+    <a id="hamburgerIcon" @click="hamburgerClick()" class="navbar-hamburger">
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
 
   <div class="links-container mobile">
     <ul>
@@ -113,7 +92,17 @@ body {
   padding: 0;
   margin: 0;
 }
-
+.hamburger-wrapper {
+  background-color: var(--beige-detail-color);
+  display: flex;
+  position: fixed;
+  border-radius: 100%;
+  width: 60px;
+  height: 60px;
+  z-index: 4;
+  right: 15px;
+  top: 15px;
+}
 
 nav {
   top: 10px;
@@ -162,9 +151,16 @@ ul > a > li {
   position: relative;
 }
 
-
 a {
   text-decoration: none;
+}
+a:hover {
+  background-color: var(--beige-detail-color);
+  color: var(--color-background) !important;
+}
+#hamburgerIcon:hover {
+  background-color: transparent;
+
 }
 
 .link {
@@ -234,7 +230,6 @@ a {
   display: none;
 }
 
-
 .nav-item-num {
   font-size: 17px;
 }
@@ -270,7 +265,7 @@ a {
     opacity: 1;
     transition: 0.4s ease-out;
     justify-content: end;
-    padding-right:10px;
+    padding-right: 10px;
   }
   .links-container.mobile.open > ul {
     align-self: center;
@@ -295,6 +290,14 @@ a {
     margin-left: 20px;
   }
   .navbar-hamburger {
+  }
+}
+@media (min-width: 1024px) {
+  .hamburger-wrapper {
+    top: 40px;
+    right: 40px;
+    width: 70px;
+    height: 70px;
   }
 }
 </style>
