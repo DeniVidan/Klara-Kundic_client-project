@@ -315,7 +315,7 @@ a {
 }
   .carousel-item {
     height: 500px;
-    min-width: 50vw;
+    min-width: 20vw;
   }
   .item-title {
     font-size: 90px;

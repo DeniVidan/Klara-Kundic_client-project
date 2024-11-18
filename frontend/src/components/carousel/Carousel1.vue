@@ -2,8 +2,10 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import { gsap } from "gsap";
 import { servicesData } from "@/store/store.js";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase/init"; // Import Firestore instance
 
-let services = ref(servicesData);
+let services = ref([...servicesData]); // Start with hardcoded data
 
 // Create refs for carousel and track elements
 const carousel = ref(null);
@@ -12,6 +14,23 @@ const currentIndex = ref(0);
 const itemWidth = ref(0);
 const containerWidth = ref(0);
 let startX;
+
+// Fetch services from Firebase
+async function fetchServices() {
+  try {
+    const servicesCollection = collection(db, "services");
+    const servicesSnapshot = await getDocs(servicesCollection);
+    const fetchedServices = servicesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Add fetched services to the reactive `services` array
+    services.value = [...fetchedServices];
+  } catch (error) {
+    console.error("Error fetching services:", error);
+  }
+}
 
 // Functions to update carousel position and apply fade effect
 function updateCarousel() {
@@ -66,7 +85,10 @@ function endDrag(e) {
   document.removeEventListener("touchmove", drag);
   document.removeEventListener("touchend", endDrag);
 }
-onMounted(() => {
+
+onMounted(async () => {
+  await fetchServices(); // Fetch services from Firebase
+
   itemWidth.value =
     carousel.value.querySelector(".carousel-item").offsetWidth + 20; // including gap
   containerWidth.value = document.querySelector(
@@ -113,9 +135,9 @@ onUnmounted(() => {});
           <div class="layer"></div>
           <img :src="service.image" alt="" />
           <div class="item-title">
-            {{ service.name }}
+            {{ service.title }}
           </div>
-          <div class="item-text">{{ service.text }}</div>
+          <div class="item-text">{{ service.description }}</div>
         </div>
       </div>
 
@@ -141,9 +163,9 @@ onUnmounted(() => {});
           <div class="layer"></div>
           <img :src="service.image" alt="" />
           <div class="item-title">
-            {{ service.name }}
+            {{ service.title }}
           </div>
-          <div class="item-text">{{ service.text }}</div>
+          <div class="item-text">{{ service.description }}</div>
         </div>
       </div>
     </div>
@@ -237,7 +259,7 @@ onUnmounted(() => {});
   position: absolute;
   color: black;
   font-size: 16px;
-  bottom: -140px;
+  top: 350px;
   z-index: 10;
   overflow: hidden;
   display: -webkit-box;
@@ -285,6 +307,7 @@ onUnmounted(() => {});
   .item-desktop {
     position: relative;
     width: 400px;
+    height: 400px;
     border-radius: 10px;
   }
   .items-wrapper {
@@ -307,6 +330,9 @@ onUnmounted(() => {});
     display: flex;
     width: 100%;
     justify-content: center;
+  }
+  .item-text {
+    top: 450px;
   }
 }
 </style>

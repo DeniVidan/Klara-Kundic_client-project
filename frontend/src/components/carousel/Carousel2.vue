@@ -164,9 +164,9 @@ onUnmounted(() => {});
           :key="index"
         >
           <div class="layer"></div>
-          <img :src="work.image_url" alt="" />
+          <img :src="work.images" alt="" />
           <div class="item-title">
-            {{ work.company_name }}
+            {{ work.title }}
           </div>
         </div>
       </div>
@@ -295,6 +295,7 @@ onUnmounted(() => {});
   .item-desktop {
     position: relative;
     width: 300px;
+    height: 400px;
     border-radius: 10px;
     overflow: hidden;
     cursor:pointer;

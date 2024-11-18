@@ -78,15 +78,10 @@ async function uploadImages() {
       createdAt: new Date(),
     };
 
-    // Add metadata to Firestore and retrieve the document ID
+    // Add metadata to Firestore
     const docRef = await addDoc(collection(db, "works"), workData);
-    const docId = docRef.id; // Retrieve the unique ID assigned by Firestore
-
-    // Update the document with the unique ID (if needed elsewhere)
-    await addDoc(collection(db, "works"), { ...workData, id: docId });
-
     alert("Work added successfully!");
-    console.log("Work saved:", { ...workData, id: docId });
+    console.log("Work saved:", { ...workData, id: docRef.id });
 
     // Clear inputs
     uploadedImages.value = [];

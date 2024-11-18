@@ -1,34 +1,26 @@
 <script setup>
-import { onMounted, onUnmounted, ref, render, toRefs, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useCurrentUser, useFirebaseAuth } from "vuefire";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Draggable } from "gsap/Draggable";
-import { fakedata } from "@/store/store.js";
-import CallToAction from "@/components/braker/CallToAction.vue";
-import FooterSection from "@/components/SECTIONS/FooterSection.vue";
 import { getCurrentUser } from "@/firebase/init";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db } from "@/firebase/init";
-
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(Draggable);
+import FooterSection from "@/components/SECTIONS/FooterSection.vue";
+import CallToAction from "@/components/braker/CallToAction.vue";
 
 const props = defineProps({
   id: String,
 });
 
 const route = useRoute();
+const router = useRouter();
 const work = ref(null);
 const images = ref([]);
-
 const carousel = ref(null);
 const currentIndex = ref(0);
 const itemWidth = ref(0);
 const containerWidth = ref(0);
 const startX = ref(0);
-let user = ref(null)
+let user = ref(null);
 
 // Fetch work data by ID
 async function fetchWorkById(id) {
@@ -43,6 +35,24 @@ async function fetchWorkById(id) {
     }
   } catch (error) {
     console.error("Error fetching work:", error);
+  }
+}
+
+// Delete the currently opened work
+async function deleteWork() {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this work? This action cannot be undone."
+  );
+  if (confirmed) {
+    try {
+      const docRef = doc(collection(db, "works"), props.id);
+      await deleteDoc(docRef);
+      alert("Work deleted successfully.");
+      router.push("/mywork"); // Redirect to a different page after deletion
+    } catch (error) {
+      console.error("Error deleting work:", error);
+      alert("Failed to delete the work. Please try again.");
+    }
   }
 }
 
@@ -111,8 +121,8 @@ function endDrag(e) {
 }
 
 onMounted(async () => {
-  user.value = await getCurrentUser()
-  console.log("user:", user.value)
+  user.value = await getCurrentUser();
+  console.log("user:", user.value);
   await fetchWorkById(props.id);
 
   if (carousel.value && images.value.length) {
@@ -158,8 +168,8 @@ onMounted(async () => {
       </button>
     </div>
     <div v-if="user" class="edit-buttons">
-      <img src="@/assets/images/edit.png" alt="">
-      <img src="@/assets/images/delete.png" alt="">
+      <img src="@/assets/images/edit.png" alt="edit button">
+      <img src="@/assets/images/delete.png" @click="deleteWork" alt="delete buton">
     </div>
     <div v-if="work?.title" class="text-content-wrapper">
       <div class="main-content-wrapper">
@@ -177,8 +187,8 @@ onMounted(async () => {
         </div>
       </div>
       <CallToAction style="margin-top: 50px" />
+      
     </div>
-
     <FooterSection style="margin-top: 100px" />
   </div>
 </template>

@@ -12,7 +12,9 @@ const router = useRouter();
 const route = useRoute();
 
 const auth = useFirebaseAuth();
-
+function goToProfile() {
+  router.push({name: "profile"})
+}
 onMounted(() => {});
 
 function hamburgerClick() {
@@ -43,6 +45,7 @@ function hamburgerClick() {
 <template>
   <div style="z-index: 6">
     <button v-if="useCurrentUser().value" @click="signOut(auth)">LOGOUT</button>
+    <button v-if="useCurrentUser().value" @click="goToProfile">PROFILE</button>
   </div>
   <div class="hamburger-wrapper">
     <a id="hamburgerIcon" @click="hamburgerClick()" class="navbar-hamburger">
